@@ -7,8 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: GalleryRepository::class)]
+#[UniqueEntity(fields: ['title'], message: 'Une galerie avec ce titre existe déjà')]
+#[UniqueEntity(fields: ['slug'], message: 'Ce slug est déjà utilisé')]
 class Gallery
 {
     #[ORM\Id]
@@ -17,9 +21,20 @@ class Gallery
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le titre ne peut pas être vide')]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'Le titre doit contenir au moins {{ limit }} caractères',
+        maxMessage: 'Le titre ne peut pas dépasser {{ limit }} caractères'
+    )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(
+        max: 10000,
+        maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères'
+    )]
     private ?string $description = null;
 
     /**
@@ -32,9 +47,21 @@ class Gallery
     private ?Image $featuredImage = null;
 
     #[ORM\ManyToOne(inversedBy: 'galleries')]
+    #[Assert\NotNull(message: 'Veuillez sélectionner une catégorie')]
     private ?Category $category = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le slug ne peut pas être vide')]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: 'Le slug doit contenir au moins {{ limit }} caractères',
+        maxMessage: 'Le slug ne peut pas dépasser {{ limit }} caractères'
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-z0-9\-]+$/',
+        message: 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets'
+    )]
     private ?string $slug = null;
 
     public function __construct()
@@ -54,7 +81,7 @@ class Gallery
 
     public function setTitle(string $title): static
     {
-        $this->title = $title;
+        $this->title = trim($title);
 
         return $this;
     }
@@ -66,7 +93,7 @@ class Gallery
 
     public function setDescription(?string $description): static
     {
-        $this->description = $description;
+        $this->description = $description !== null ? trim($description) : null;
 
         return $this;
     }
@@ -132,8 +159,25 @@ class Gallery
 
     public function setSlug(string $slug): static
     {
-        $this->slug = $slug;
+        $this->slug = trim(strtolower($slug));
 
         return $this;
+    }
+
+    /**
+     * Méthode utilitaire pour définir l'image mise en avant
+     * Si aucune image n'est spécifiée, utilise la première image de la galerie
+     */
+    public function updateFeaturedImage(): void
+    {
+        // Si une image mise en avant est déjà définie, on ne fait rien
+        if ($this->featuredImage !== null) {
+            return;
+        }
+
+        // Si la galerie a des images, on utilise la première comme image mise en avant
+        if (!$this->images->isEmpty()) {
+            $this->featuredImage = $this->images->first();
+        }
     }
 }
