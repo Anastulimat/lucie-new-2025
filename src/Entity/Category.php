@@ -7,8 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[UniqueEntity(fields: ['title'], message: 'Cette catégorie existe déjà')]
+#[UniqueEntity(fields: ['slug'], message: 'Ce slug est déjà utilisé')]
 class Category
 {
     #[ORM\Id]
@@ -17,9 +21,20 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le titre ne peut pas être vide')]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Le titre doit contenir au moins {{ limit }} caractères',
+        maxMessage: 'Le titre ne peut pas dépasser {{ limit }} caractères'
+    )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(
+        max: 10000,
+        maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères'
+    )]
     private ?string $description = null;
 
     /**
@@ -29,6 +44,17 @@ class Category
     private Collection $galleries;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le slug ne peut pas être vide')]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Le slug doit contenir au moins {{ limit }} caractères',
+        maxMessage: 'Le slug ne peut pas dépasser {{ limit }} caractères'
+    )]
+    #[Assert\Regex(
+        pattern: '/^[a-z0-9\-]+$/',
+        message: 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets'
+    )]
     private ?string $slug = null;
 
     public function __construct()
@@ -50,7 +76,7 @@ class Category
 
     public function setTitle(string $title): static
     {
-        $this->title = $title;
+        $this->title = trim($title);
 
         return $this;
     }
@@ -62,7 +88,7 @@ class Category
 
     public function setDescription(?string $description): static
     {
-        $this->description = $description;
+        $this->description = $description !== null ? trim($description) : null;
 
         return $this;
     }
@@ -104,7 +130,7 @@ class Category
 
     public function setSlug(string $slug): static
     {
-        $this->slug = $slug;
+        $this->slug = trim(strtolower($slug));
 
         return $this;
     }
