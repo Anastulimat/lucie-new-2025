@@ -1,0 +1,30 @@
+{% extends 'admin.base.html.twig' %}
+
+{% block title %}Nouvelle Gallery{% endblock %}
+
+{% block page_title %}Créer une gallery{% endblock %}
+
+{% block breadcrumb %}
+    {% include '_breadcrumb.html.twig' with {
+        breadcrumbs: [
+            { label: 'Galleries', path: path('app_gallery_index') },
+            { label: 'Créer' }
+        ]
+    } %}
+{% endblock %}
+
+
+{% block content %}
+    <h2 class="h5 mb-4">Nouvelle gallery</h2>
+
+    {{ include('admin/gallery/_form.html.twig') }}
+
+    <a href="{{ path('app_gallery_index') }}" class="btn btn-outline-secondary mt-3">
+        <i class="bi bi-arrow-left"></i> Retour à la liste
+    </a>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ asset('js/autoSlug.js') }}"></script>
+{% endblock %}

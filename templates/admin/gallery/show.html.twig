@@ -1,0 +1,53 @@
+{% extends 'admin.base.html.twig' %}
+
+{% block title %}Détail de la gallery{% endblock %}
+
+{% block page_title %}Gallery « {{ gallery.title }} »{% endblock %}
+
+{% block breadcrumb %}
+    {% include '_breadcrumb.html.twig' with {
+        breadcrumbs: [
+            { label: 'Galleries', path: path('app_gallery_index') },
+            { label: gallery.title }
+        ]
+    } %}
+{% endblock %}
+
+{% block content %}
+
+    <h2 class="h5 mb-4">Informations sur la gallery</h2>
+
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th scope="row">ID</th>
+            <td>{{ gallery.id }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Titre</th>
+            <td>{{ gallery.title }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Description</th>
+            <td>{{ gallery.description }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Slug</th>
+            <td>{{ gallery.slug }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex gap-2 mt-4">
+        <a href="{{ path('app_gallery_index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Retour à la liste
+        </a>
+
+        <a href="{{ path('app_gallery_edit', {'id': gallery.id}) }}" class="btn btn-primary">
+            <i class="bi bi-pencil"></i> Modifier
+        </a>
+
+        {{ include('admin/gallery/_delete_form.html.twig') }}
+    </div>
+
+{% endblock %}

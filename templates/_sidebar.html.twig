@@ -20,6 +20,13 @@
                     <i class="bi bi-image"></i> Categories
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white {% if app.request.attributes.get('_route') == 'app_gallery_index' %}active{% endif %}"
+                   href="{{ path('app_gallery_index') }}">
+                    <i class="bi bi-images"></i> Galleries
+                </a>
+            </li>
         {% endblock %}
     </ul>
 </div>

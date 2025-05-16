@@ -1,0 +1,64 @@
+{% extends 'admin.base.html.twig' %}
+
+{% block title %}Galleries{% endblock %}
+
+{% block page_title %}
+    Liste des Galleries
+{% endblock %}
+
+{% block breadcrumb %}
+    {% include '_breadcrumb.html.twig' with {
+        breadcrumbs: [
+            { label: 'Galleries', path: path('app_gallery_index') }
+        ]
+    } %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">Galleries</h2>
+        <a href="{{ path('app_gallery_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Nouvelle Gallery
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Titre</th>
+                <th scope="col">Slug</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for gallery in galleries %}
+                <tr>
+                    <td>{{ gallery.id }}</td>
+                    <td>{{ gallery.title }}</td>
+                    <td>{{ gallery.slug }}</td>
+                    <td>{{ gallery.description }}</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a href="{{ path('app_gallery_show', {'id': gallery.id}) }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{{ path('app_gallery_edit', {'id': gallery.id}) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">Aucune gallery trouvée.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

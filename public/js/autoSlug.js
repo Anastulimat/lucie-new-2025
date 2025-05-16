@@ -1,30 +1,32 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const titleInput = document.querySelector('#category_form_title');
-    const slugInput = document.querySelector('#category_form_slug');
-    const slugAutoCheckbox = document.querySelector('#category_form_slugAuto');
     function slugify(text) {
         return text
             .toString()
             .toLowerCase()
-            .normalize('NFD')                     // Remove accents
-            .replace(/[\u0300-\u036f]/g, '')     // Remove accents continued
-            .replace(/\s+/g, '-')                // Replace spaces with -
-            .replace(/[^\w\-]+/g, '')            // Remove all non-word chars
-            .replace(/\-\-+/g, '-')              // Replace multiple - with single -
-            .replace(/^-+/, '')                  // Trim - from start of text
-            .replace(/-+$/, '');                 // Trim - from end of text
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '');
     }
 
-    function updateSlug() {
-        if (slugAutoCheckbox.checked && titleInput && slugInput) {
-            slugInput.value = slugify(titleInput.value);
+    // Rechercher tous les formulaires qui ont les éléments requis
+    document.querySelectorAll('form').forEach(form => {
+        const titleInput = form.querySelector('[id$="_title"]');
+        const slugInput = form.querySelector('[id$="_slug"]');
+        const slugAutoCheckbox = form.querySelector('[id$="_slugAuto"]');
+
+        function updateSlug() {
+            if (slugAutoCheckbox?.checked && titleInput && slugInput) {
+                slugInput.value = slugify(titleInput.value);
+            }
         }
-    }
 
-    if (slugAutoCheckbox && titleInput) {
-        titleInput.addEventListener('input', updateSlug);
-    }
-
-    // Initial auto-fill on load
-    updateSlug();
+        if (titleInput && slugInput && slugAutoCheckbox) {
+            titleInput.addEventListener('input', updateSlug);
+            updateSlug(); // Initial auto-fill
+        }
+    });
 });

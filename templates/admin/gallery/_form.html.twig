@@ -1,0 +1,29 @@
+{{ form_start(form, { attr: { id: 'gallery-form' } }) }}
+
+<div class="mb-3">
+    {{ form_row(form.title) }}
+</div>
+
+<div class="mb-3">
+    {{ form_widget(form.slugAuto, { attr: { class: 'form-check-input', id: 'slugAutoSwitch' } }) }}
+</div>
+
+<div class="mb-3">
+    {{ form_row(form.slug) }}
+</div>
+
+<div class="mb-3">
+    {{ form_row(form.description) }}
+</div>
+
+<div class="mb-3">
+    {{ form_row(form.featuredImage) }}
+</div>
+
+<div class="mb-3">
+    {{ form_row(form.category) }}
+</div>
+
+<button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+
+{{ form_end(form) }}
