@@ -28,6 +28,9 @@ class Category
     #[ORM\OneToMany(targetEntity: Gallery::class, mappedBy: 'category')]
     private Collection $galleries;
 
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
     public function __construct()
     {
         $this->galleries = new ArrayCollection();
@@ -90,6 +93,18 @@ class Category
                 $gallery->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }
