@@ -1,13 +1,30 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.base.html.twig' %}
 
-{% block title %}Edit Category{% endblock %}
+{% block title %}Modifier une catégorie{% endblock %}
 
-{% block body %}
-    <h1>Edit Category</h1>
+{% block page_title %}Modifier la catégorie « {{ category.title }} »{% endblock %}
 
-    {{ include('admin/category/_form.html.twig', {'button_label': 'Update'}) }}
+{% block breadcrumb %}
+    {% include '_breadcrumb.html.twig' with {
+        breadcrumbs: [
+            { label: 'Catégories', path: path('app_category_index') },
+            { label: 'Modifier' }
+        ]
+    } %}
+{% endblock %}
 
-    <a href="{{ path('app_category_index') }}">back to list</a>
+{% block content %}
 
-    {{ include('admin/category/_delete_form.html.twig') }}
+    <h2 class="h5 mb-4">Édition de la catégorie</h2>
+
+    {{ include('admin/category/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+    <div class="d-flex gap-2 mt-3">
+        <a href="{{ path('app_category_index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Retour à la liste
+        </a>
+
+        {{ include('admin/category/_delete_form.html.twig') }}
+    </div>
+
 {% endblock %}

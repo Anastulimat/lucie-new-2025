@@ -1,11 +1,26 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.base.html.twig' %}
 
-{% block title %}New Category{% endblock %}
+{% block title %}Nouvelle catégorie{% endblock %}
 
-{% block body %}
-    <h1>Create new Category</h1>
+{% block page_title %}Créer une catégorie{% endblock %}
+
+{% block breadcrumb %}
+    {% include '_breadcrumb.html.twig' with {
+        breadcrumbs: [
+            { label: 'Catégories', path: path('app_category_index') },
+            { label: 'Créer' }
+        ]
+    } %}
+{% endblock %}
+
+{% block content %}
+
+    <h2 class="h5 mb-4">Nouvelle catégorie</h2>
 
     {{ include('admin/category/_form.html.twig') }}
 
-    <a href="{{ path('app_category_index') }}">back to list</a>
+    <a href="{{ path('app_category_index') }}" class="btn btn-outline-secondary mt-3">
+        <i class="bi bi-arrow-left"></i> Retour à la liste
+    </a>
+
 {% endblock %}
