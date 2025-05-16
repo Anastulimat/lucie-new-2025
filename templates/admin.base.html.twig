@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Top navbar with toggle for sidebar -->
+        <nav class="navbar navbar-dark bg-dark d-md-none">
+            <div class="container-fluid">
+                <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#sidebarMobile">
+                    <i class="bi bi-list"></i>
+                </button>
+                <a class="navbar-brand ms-2" href="{{ path('app_dashboard') }}">My Admin</a>
+            </div>
+        </nav>
+
+        <!-- Sidebar Desktop -->
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-none d-md-block sidebar">
+            {% include '_sidebar.html.twig' %}
+        </nav>
+
+        <!-- Sidebar Mobile (Offcanvas) -->
+        <div class="offcanvas offcanvas-start text-white bg-dark" tabindex="-1" id="sidebarMobile">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Menu</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="offcanvas-body">
+                {% include '_sidebar.html.twig' %}
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-3">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">{% block page_title %}Dashboard{% endblock %}</h1>
+            </div>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

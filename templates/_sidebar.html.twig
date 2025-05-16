@@ -1,0 +1,25 @@
+<div class="position-sticky">
+    <div class="sidebar-header text-center py-3">
+        <a href="{{ path('app_dashboard') }}" class="text-white text-decoration-none">
+            <h4 class="m-0">My Admin</h4>
+        </a>
+    </div>
+    <hr class="text-secondary">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link text-white {% if app.request.attributes.get('_route') == 'app_dashboard' %}active{% endif %}"
+               href="{{ path('app_dashboard') }}">
+                <i class="bi bi-house-door"></i> Dashboard
+            </a>
+        </li>
+        <hr class="text-secondary">
+        {% block sidebar %}
+            <li class="nav-item">
+                <a class="nav-link text-white {% if app.request.attributes.get('_route') == 'app_category_index' %}active{% endif %}"
+                   href="{{ path('app_category_index') }}">
+                    <i class="bi bi-people"></i> Categories
+                </a>
+            </li>
+        {% endblock %}
+    </ul>
+</div>

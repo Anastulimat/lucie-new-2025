@@ -1,0 +1,48 @@
+/* Sidebar styles for desktop */
+#sidebar {
+    height: 100vh;
+    overflow-y: auto;
+    padding-top: 1rem;
+    background-color: #212529;
+}
+
+/* Sidebar links */
+.sidebar .nav-link {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #adb5bd;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #495057;
+    color: #fff;
+}
+
+.sidebar .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+
+.sidebar-header {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Main content positioning */
+@media (min-width: 768px) {
+    main {
+        margin-left: 250px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    main {
+        margin-left: 0;
+    }
+}
