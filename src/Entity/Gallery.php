@@ -40,10 +40,10 @@ class Gallery
     /**
      * @var Collection<int, Image>
      */
-    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'gallery')]
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'gallery', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $images;
 
-    #[ORM\ManyToOne(inversedBy: 'galleries')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'galleries')]
     private ?Image $featuredImage = null;
 
     #[ORM\ManyToOne(inversedBy: 'galleries')]
@@ -63,6 +63,11 @@ class Gallery
         message: 'Le slug ne peut contenir que des lettres minuscules, des chiffres et des tirets'
     )]
     private ?string $slug = null;
+
+    #[Assert\All([
+        new Assert\Image(mimeTypes: ['image/png', 'image/jpeg', 'image/jpg'])
+    ])]
+    private ?array $imagesFiles = null;
 
     public function __construct()
     {
@@ -179,5 +184,21 @@ class Gallery
         if (!$this->images->isEmpty()) {
             $this->featuredImage = $this->images->first();
         }
+    }
+
+    public function getImagesFiles(): ?array
+    {
+        return $this->imagesFiles;
+    }
+
+    public function setImagesFiles(?array $imagesFiles): static
+    {
+        foreach ($imagesFiles as $imagesFile) {
+            $image = new Image();
+            $image->setImageFile($imagesFile);
+            $this->addImage($image);
+        }
+        $this->imagesFiles = $imagesFiles;
+        return $this;
     }
 }
