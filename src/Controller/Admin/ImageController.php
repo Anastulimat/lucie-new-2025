@@ -13,24 +13,19 @@ use Vich\UploaderBundle\Handler\UploadHandler;
 
 class ImageController extends AbstractController
 {
-    #[Route('admin/image/{id}/delete', name: 'app_image_delete', methods: ['POST', 'DELETE'])]
-    public function deleteImage(
-        Request $request,
-        Image $image,
-        EntityManagerInterface $entityManager,
-        UploadHandler $uploadHandler
-    ): Response {
-        if ($this->isCsrfTokenValid('delete'.$image->getId(), $request->getPayload()->getString('_token'))) {
-
-            // Supprimer le fichier physique lié à l'image
-            $uploadHandler->remove($image, 'imageFile');
-
-            // Ensuite, supprimer l'entité
+    #[Route('admin/image/{id}/delete', name: 'app_image_delete', methods: ['DELETE'])]
+    public function delete(Image $image, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
             $entityManager->remove($image);
             $entityManager->flush();
+            return new JsonResponse(['success' => 1]);
+        } else {
+            return new JsonResponse(['error' => 'Token invalid'], 400);
         }
 
-        return $this->redirectToRoute('app_gallery_index', [], Response::HTTP_SEE_OTHER);
+
     }
 
 }
