@@ -1,17 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Lucie Sassiat is Photographer & Director .Paris - London - New York. She was born in Brittany and she lives in Paris. Personal. Art. Fashion. Portrait.">
+        <meta name="keywords" content="LucieSassiat, Lucie, Sassiat, Photographer, Paris, Art, Fashion, Portrait">
+        <meta name="author" content="Lucie Sassiat">
+
+        <title>{% block title %}Lucie Sassiat{% endblock %}</title>
+
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <!-- Link Swiper's CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+        {#<link rel="stylesheet" href="{{ asset('css/home.css') }}">#}
+
         {% block stylesheets %}
         {% endblock %}
 
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
+
     <body>
+        <header>
+            <div class="w-full flex justify-center lg:justify-start">
+                <h1>
+                    <a class="uppercase font-semibold text-4xl lg:text-6xl" href="{{ path('app_home') }}">Lucie Sassiat</a>
+                </h1>
+            </div>
+        </header>
+
         {% block body %}{% endblock %}
+
+        <footer class="flex justify-between w-full">
+            <a
+                    href="https://www.instagram.com/luciesassiat/"
+                    target="_blank"
+                    class="font-semibold text-lg"
+            >
+                Instagram
+            </a>
+
+            <a
+                    href="{{ path('app_home') }}"
+                    class="text-right font-semibold text-lg"
+            >
+                Contact
+            </a>
+        </footer>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.2/lightgallery.min.js"></script>
+
+        <!-- Swiper JS -->
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <script>
+            document.addEventListener("turbo:load", function () {
+                if (window.swiper) {
+                    window.swiper.destroy(true, true);
+                }
+                window.swiper = new Swiper('.swiper-container', {
+                    effect: 'fade',
+                    loop: true,
+                    autoplay: {
+                        delay: 5000
+                    },
+                    fadeEffect: {
+                        crossFade: true
+                    },
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
+                    keyboard: {
+                        enabled: true,
+                        onlyInViewport: false,
+                    },
+                });
+            });
+        </script>
+
     </body>
 </html>
