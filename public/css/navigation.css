@@ -85,6 +85,7 @@ nav a:hover:after {
     display: none;
     cursor: pointer;
     font-size: 24px;
+    margin-left: auto; /* Force l'alignement à droite */
 }
 
 /* Responsive styles - navigation */
@@ -126,5 +127,6 @@ nav a:hover:after {
 
     .menu-toggle {
         display: block;
+        margin-left: auto; /* S'assurer que le burger est bien à droite */
     }
 }
