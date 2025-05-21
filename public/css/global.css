@@ -3,12 +3,14 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Helvetica Neue', Arial, sans-serif;
+    scroll-behavior: smooth;
 }
 
 body {
     background-color: #fff;
     color: #333;
     line-height: 1.6;
+    height: 100%;
 }
 
 a {
