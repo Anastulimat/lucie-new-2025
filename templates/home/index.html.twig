@@ -1,23 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Lucie Sassiat | Home{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block body %}
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <!-- Slides -->
-            {% for image in images %}
-                <div class="swiper-slide">
-                    <img
-                            src="{{ asset('uploads/images/' ~ image) }}"
-                            alt="{{ image }}"
-                            class="block h-full w-full object-contain"
-                    >
-                </div>
-            {% endfor %}
-        </div>
 
-        <div class="swiper-button-next hidden lg:flex"></div>
-        <div class="swiper-button-prev hidden lg:flex"></div>
-    </div>
+
+
 {% endblock %}

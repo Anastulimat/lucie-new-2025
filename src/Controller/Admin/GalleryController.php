@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/gallery')]
+#[Route('/admin/gallery')]
 final class GalleryController extends AbstractController
 {
     #[Route(name: 'app_gallery_index', methods: ['GET'])]

@@ -1,0 +1,39 @@
+/* Project info section (left side) */
+.project-info {
+    width: 25%;
+    padding-right: 20px;
+    padding-left: 20px;
+    position: sticky;
+    top: 100px;
+    align-self: flex-start;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+/* Project title and description */
+.project-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.project-description {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Responsive styles - sidebar */
+@media (max-width: 1024px) {
+    .project-info {
+        width: 30%;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-info {
+        width: 100%;
+        padding-right: 0;
+        margin-bottom: 30px;
+        position: static;
+    }
+}
