@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello GalleryController!{% endblock %}
+{% block title %}{{ gallery.title }}{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/leftSide.css') }}">
@@ -9,37 +9,23 @@
 {% block body %}
     <div class="main-content">
         <div class="project-info">
-            <h1 class="project-title">THE SOUTH WINNERS</h1>
-            <p class="project-description">I followed the "South Winners," Olympique de Marseille's iconic ultras to a
-                football game at the Vélodrome for M, le magazine du Monde (April 2024).</p>
+            <h1 class="project-title">{{ gallery.title|upper }}</h1>
+            <p class="project-description">{{ gallery.description }}</p>
         </div>
 
         <div class="gallery-section">
             <div class="gallery-grid">
-                <div class="gallery-item landscape">
-                    <img src="https://images.squarespace-cdn.com/content/v1/5e3ad5f2597c7c5ee13ccf4c/1703171747639-CWHKUK0FA18YSDUIOP8C/07_vincent_desailly_pologne.jpg"
-                         alt="Crowd of cheering fans" data-index="1">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://images.squarespace-cdn.com/content/v1/5e3ad5f2597c7c5ee13ccf4c/1703171748782-274OBJM8XIS5927SFBQL/08_vincent_desailly_pologne.jpg?format=500w"
-                         alt="Close-up of fan with tattoo" data-index="0">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://images.squarespace-cdn.com/content/v1/5e3ad5f2597c7c5ee13ccf4c/1703171750711-KPDE6126WB7DZKPC89AN/09_vincent_desailly_pologne.jpg?format=500w"
-                         alt="Fans with white shirts" data-index="2">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://images.squarespace-cdn.com/content/v1/5e3ad5f2597c7c5ee13ccf4c/1703171751473-ES5CLJAWIUNL2XVKSJE1/10_vincent_desailly_pologne.jpg?format=500w"
-                         alt="Fans with flag and instruments" data-index="3">
-                </div>
-                <div class="gallery-item landscape">
-                    <img src="https://www.luciesassiat.com/images/portfolios/lucie-sassiat-7.jpg"
-                         alt="Blurred crowd view" data-index="4">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://www.luciesassiat.com/images/portfolios/lucie-sassiat-29.jpg"
-                         alt="Fans watching match" data-index="5">
-                </div>
+                {% for image in gallery.images %}
+                    <div class="gallery-item">
+                        <img src="{{ asset('uploads/images/' ~ image.filename) }}"
+                             alt="{{ image.altText ?? gallery.title }}"
+                             data-index="{{ loop.index0 }}">
+                    </div>
+                {% else %}
+                    <div class="gallery-item">
+                        <p>Aucune image disponible pour cette galerie.</p>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

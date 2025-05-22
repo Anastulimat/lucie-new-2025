@@ -16,6 +16,18 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
+
+    public function findAllWithGalleries(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.galleries', 'g')
+            ->addSelect('g')
+            ->orderBy('c.title', 'ASC')
+            ->addOrderBy('g.title', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Category[] Returns an array of Category objects
 //     */
