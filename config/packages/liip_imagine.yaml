@@ -1,5 +1,33 @@
 liip_imagine:
     filter_sets:
+        # Miniatures pour la grille de la galerie
+        gallery_thumb:
+            quality: 85
+            filters:
+                thumbnail:
+                    size: [400, 300]
+                    mode: outbound
+                strip: ~
+
+        # Images moyennes pour la lightbox
+        gallery_medium:
+            quality: 90
+            filters:
+                thumbnail:
+                    size: [1200, 800]
+                    mode: inset
+                strip: ~
+
+        # Images haute résolution pour la lightbox (optionnel)
+        gallery_large:
+            quality: 95
+            filters:
+                thumbnail:
+                    size: [1920, 1280]
+                    mode: inset
+                strip: ~
+
+        # Vos filtres existants
         thumb:
             quality: 75
             filters:

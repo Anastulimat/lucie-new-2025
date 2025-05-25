@@ -22,13 +22,17 @@
                 {% for image in gallery.images %}
                     <div class="gallery-item">
                         <a
-                                href="{{ asset('uploads/images/' ~ image.filename) }}"
+                                href="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_large') }}"
                                 data-fancybox="gallery"
                                 data-caption="{{ image.altText ?? gallery.title }}"
                         >
                             <img
-                                    src="{{ asset('uploads/images/' ~ image.filename) }}"
+                                    src="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }}"
                                     alt="{{ image.altText ?? gallery.title }}"
+                                    srcset="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }} 400w,
+                                            {{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_medium') }} 800w"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                    loading="lazy"
                             />
                         </a>
                     </div>
@@ -45,10 +49,9 @@
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialisation de Fancybox
-            Fancybox.bind('[data-fancybox="gallery"]', {
-            });
+            Fancybox.bind('[data-fancybox="gallery"]', {});
         });
     </script>
 {% endblock %}
