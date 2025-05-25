@@ -3,66 +3,23 @@
 {% block title %}Home{% endblock %}
 
 {% block stylesheets %}
-    <!-- Link Swiper's CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 {% endblock %}
 
 {% block body %}
+
+
     <div class="swiper-container">
         <div class="swiper-wrapper">
-            <!-- Slides -->
             {% for image in images %}
                 <div class="swiper-slide">
-                    <img src="{{ asset('uploads/images/' ~ image) }}" alt="{{ image }}">
+                    <img src="{{ asset('uploads/images/' ~ image) | imagine_filter('gallery_large') }}" alt="{{ image }}">
                 </div>
             {% endfor %}
         </div>
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
     </div>
-{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        let swiperInstance = null;
-
-        function initSwiper() {
-            if (swiperInstance) {
-                swiperInstance.destroy(true, true);
-            }
-
-            swiperInstance = new Swiper('.swiper-container', {
-                effect: 'fade',
-                loop: true,
-                autoplay: {
-                    delay: 5000
-                },
-                fadeEffect: {
-                    crossFade: true
-                },
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                },
-                keyboard: {
-                    enabled: true,
-                    onlyInViewport: false,
-                },
-            });
-        }
-
-        // Initialiser Swiper au chargement initial et après navigation Turbo
-        document.addEventListener('DOMContentLoaded', initSwiper);
-        document.addEventListener('turbo:load', initSwiper);
-
-        // S'assurer que Swiper s'adapte à la taille de l'écran
-        window.addEventListener('resize', function () {
-            if (swiperInstance) {
-                swiperInstance.update();
-            }
-        });
-    </script>
 {% endblock %}
