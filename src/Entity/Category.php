@@ -57,6 +57,9 @@ class Category
     )]
     private ?string $slug = null;
 
+    #[ORM\Column]
+    private ?bool $visibleInNavigation = null;
+
     public function __construct()
     {
         $this->galleries = new ArrayCollection();
@@ -131,6 +134,18 @@ class Category
     public function setSlug(string $slug): static
     {
         $this->slug = trim(strtolower($slug));
+
+        return $this;
+    }
+
+    public function isVisibleInNavigation(): ?bool
+    {
+        return $this->visibleInNavigation;
+    }
+
+    public function setVisibleInNavigation(bool $visibleInNavigation): static
+    {
+        $this->visibleInNavigation = $visibleInNavigation;
 
         return $this;
     }

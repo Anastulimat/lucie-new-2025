@@ -16,6 +16,10 @@
     {{ form_row(form.description) }}
 </div>
 
+<div class="mb-3">
+    {{ form_row(form.visibleInNavigation) }}
+</div>
+
 <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 
 {{ form_end(form) }}

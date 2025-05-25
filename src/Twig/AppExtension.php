@@ -18,7 +18,7 @@ class AppExtension extends AbstractExtension implements GlobalsInterface
     public function getGlobals(): array
     {
         return [
-            'categories' => $this->categoryRepository->findAllWithGalleries(),
+            'categories' => $this->categoryRepository->findVisibleInNavigation(),
         ];
     }
 }

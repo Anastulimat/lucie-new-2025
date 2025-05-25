@@ -16,12 +16,17 @@ class CategoryForm extends AbstractType
             ->add('title')
             ->add('slug')
             ->add('description')
+            ->add('visibleInNavigation', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Afficher dans la navigation principale',
+            ])
             ->add('slugAuto', CheckboxType::class, [
                 'mapped' => false,
                 'required' => false,
                 'data' => true,
                 'label' => 'Générer le slug automatiquement',
             ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

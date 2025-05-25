@@ -17,9 +17,11 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
 
-    public function findAllWithGalleries(): array
+    public function findVisibleInNavigation(): array
     {
         return $this->createQueryBuilder('c')
+            ->where('c.visibleInNavigation = :visible')
+            ->setParameter('visible', true)
             ->leftJoin('c.galleries', 'g')
             ->addSelect('g')
             ->orderBy('c.title', 'ASC')
