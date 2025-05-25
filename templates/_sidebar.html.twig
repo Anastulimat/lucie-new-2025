@@ -28,5 +28,22 @@
                 </a>
             </li>
         {% endblock %}
+
+        <hr class="text-secondary">
+
+        <!-- Lien vers le site web front -->
+        <li class="nav-item">
+            <a class="nav-link text-white" href="{{ path('app_home') }}" target="_blank">
+                <i class="bi bi-globe"></i> Voir le site web
+                <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.8em;"></i>
+            </a>
+        </li>
+
+        <!-- Lien de déconnexion -->
+        <li class="nav-item">
+            <a class="nav-link text-danger" href="{{ path('app_logout') }}">
+                <i class="bi bi-box-arrow-right"></i> Déconnexion
+            </a>
+        </li>
     </ul>
 </div>
