@@ -3,6 +3,10 @@
 {% block title %}{{ gallery.title }}{% endblock %}
 
 {% block stylesheets %}
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
+    />
     <link rel="stylesheet" href="{{ asset('css/leftSide.css') }}">
 {% endblock %}
 
@@ -17,9 +21,16 @@
             <div class="gallery-grid">
                 {% for image in gallery.images %}
                     <div class="gallery-item">
-                        <img src="{{ asset('uploads/images/' ~ image.filename) }}"
-                             alt="{{ image.altText ?? gallery.title }}"
-                             data-index="{{ loop.index0 }}">
+                        <a
+                                href="{{ asset('uploads/images/' ~ image.filename) }}"
+                                data-fancybox="gallery"
+                                data-caption="{{ image.altText ?? gallery.title }}"
+                        >
+                            <img
+                                    src="{{ asset('uploads/images/' ~ image.filename) }}"
+                                    alt="{{ image.altText ?? gallery.title }}"
+                            />
+                        </a>
                     </div>
                 {% else %}
                     <div class="gallery-item">
@@ -29,13 +40,15 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
-    <div class="lightbox">
-        <span class="close-lightbox">×</span>
-        <span class="prev-image">❮</span>
-        <span class="next-image">❯</span>
-        <div class="lightbox-content">
-            <img src="" alt="">
-        </div>
-    </div>
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialisation de Fancybox
+            Fancybox.bind('[data-fancybox="gallery"]', {
+            });
+        });
+    </script>
 {% endblock %}
