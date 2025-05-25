@@ -35,6 +35,8 @@ final class CategoryController extends AbstractController
             $entityManager->persist($category);
             $entityManager->flush();
 
+            $this->addFlash('success', 'La catégorie "' . $category->getTitle() . '" a été créée avec succès !');
+
             return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -61,6 +63,8 @@ final class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', 'La catégorie "' . $category->getTitle() . '" a été modifiée avec succès !');
+
             return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -74,8 +78,17 @@ final class CategoryController extends AbstractController
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($category);
-            $entityManager->flush();
+            try {
+                $categoryName = $category->getTitle(); // Sauvegarder le nom avant suppression
+                $entityManager->remove($category);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'La catégorie "' . $categoryName . '" a été supprimée avec succès !');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Erreur lors de la suppression de la catégorie. Elle est peut-être utilisée par des galeries.');
+            }
+        } else {
+            $this->addFlash('error', 'Token CSRF invalide. Veuillez réessayer.');
         }
 
         return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
