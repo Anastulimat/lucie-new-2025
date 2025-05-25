@@ -1,6 +1,6 @@
 /* Sidebar styles for desktop */
 #sidebar {
-    height: 100vh;
+    min-height: 100vh; /* assure une hauteur minimale de la taille de la fenêtre */
     overflow-y: auto;
     padding-top: 1rem;
     background-color: #212529;
