@@ -31,16 +31,21 @@
                 <th scope="col">Titre</th>
                 <th scope="col">Slug</th>
                 <th scope="col">Description</th>
+                <th scope="col">Nbr Galeries</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
+
             <tbody>
             {% for category in categories %}
                 <tr>
                     <td>{{ category.id }}</td>
                     <td>{{ category.title }}</td>
                     <td>{{ category.slug }}</td>
-                    <td>{{ category.description }}</td>
+                    <td>
+                        {{ category.description|slice(0, 100) }}{% if category.description|length > 100 %}…{% endif %}
+                    </td>
+                    <td>{{ category.galleries|length }}</td> {# Compte les galeries #}
                     <td>
                         <div class="btn-group" role="group">
                             <a href="{{ path('app_category_show', {'id': category.id}) }}" class="btn btn-sm btn-outline-secondary">
@@ -54,10 +59,11 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5" class="text-center text-muted">Aucune catégorie trouvée.</td>
+                    <td colspan="6" class="text-center text-muted">Aucune catégorie trouvée.</td>
                 </tr>
             {% endfor %}
             </tbody>
+
         </table>
     </div>
 {% endblock %}
