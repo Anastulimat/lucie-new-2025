@@ -20,15 +20,17 @@ class CategoryRepository extends ServiceEntityRepository
     public function findVisibleInNavigation(): array
     {
         return $this->createQueryBuilder('c')
+            ->leftJoin('c.galleries', 'g', 'WITH', 'g.visibleInNavigation = :visible')
+            ->addSelect('g')
             ->where('c.visibleInNavigation = :visible')
             ->setParameter('visible', true)
-            ->leftJoin('c.galleries', 'g')
-            ->addSelect('g')
             ->orderBy('c.title', 'ASC')
             ->addOrderBy('g.title', 'ASC')
             ->getQuery()
             ->getResult();
     }
+
+
 
 //    /**
 //     * @return Category[] Returns an array of Category objects

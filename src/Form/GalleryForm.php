@@ -25,6 +25,10 @@ class GalleryForm extends AbstractType
             ])
             ->add('slug')
             ->add('description')
+            ->add('visibleInNavigation', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Afficher dans la navigation principale',
+            ])
             ->add('featuredImageFile', FileType::class, [
                 'mapped' => false,
                 'required' => false,

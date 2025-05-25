@@ -69,6 +69,9 @@ class Gallery
     ])]
     private ?array $imagesFiles = null;
 
+    #[ORM\Column]
+    private ?bool $visibleInNavigation = null;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -199,6 +202,18 @@ class Gallery
             $this->addImage($image);
         }
         $this->imagesFiles = $imagesFiles;
+        return $this;
+    }
+
+    public function isVisibleInNavigation(): ?bool
+    {
+        return $this->visibleInNavigation;
+    }
+
+    public function setVisibleInNavigation(bool $visibleInNavigation): static
+    {
+        $this->visibleInNavigation = $visibleInNavigation;
+
         return $this;
     }
 }
