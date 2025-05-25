@@ -30,6 +30,8 @@
                 <th scope="col">ID</th>
                 <th scope="col">Titre</th>
                 <th scope="col">Slug</th>
+                <th scope="col">Catégorie</th>
+                <th scope="col">Nbr Images</th>
                 <th scope="col">Description</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -40,7 +42,18 @@
                     <td>{{ gallery.id }}</td>
                     <td>{{ gallery.title }}</td>
                     <td>{{ gallery.slug }}</td>
-                    <td>{{ gallery.description }}</td>
+                    <td>
+                        {% if gallery.category %}
+                            {{ gallery.category.title }}
+                        {% else %}
+                            <span class="text-muted">Aucune</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ gallery.images|length }}</td>
+                    <td>
+                        {{ gallery.description|slice(0, 100) }}{% if gallery.description|length > 100 %}…{% endif %}
+                    </td>
+
                     <td>
                         <div class="btn-group" role="group">
                             <a href="{{ path('app_gallery_show', {'id': gallery.id}) }}" class="btn btn-sm btn-outline-secondary">
@@ -54,7 +67,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5" class="text-center text-muted">Aucune gallery trouvée.</td>
+                    <td colspan="7" class="text-center text-muted">Aucune galerie trouvée.</td>
                 </tr>
             {% endfor %}
             </tbody>
