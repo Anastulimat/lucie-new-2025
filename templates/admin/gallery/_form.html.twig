@@ -28,30 +28,199 @@
     {{ form_row(form.featuredImageFile) }}
 </div>
 
-{#<div class="mb-3">
-    <img src="{{ vich_uploader_asset(gallery.featuredImage, 'imageFile') | imagine_filter('thumb') }}" width="100" alt="Image">
-</div>#}
-
 <div class="mb-3">
     {{ form_row(form.imagesFiles) }}
 </div>
 
 <div class="mb-3">
-    <div class="row flex justify-content-start flex-wrap" id="gallery-images">
-        {% for image in gallery.images %}
-            <div class="col image-container" style="width: 100px; flex: none; margin: 5px;" data-image-id="{{ image.id }}">
-                <img src="{{ vich_uploader_asset(image, 'imageFile') | imagine_filter('thumb') }}" width="100" alt="Image">
+    <h5>Images de la galerie</h5>
+    <p class="text-muted">Glissez-déposez les images pour changer leur ordre d'affichage</p>
 
-                <a href="{{ path('app_image_delete', {id: image.id}) }}" class="btn btn-danger" data-delete data-token="{{ csrf_token('delete' ~ image.id) }}">
-                    Supprimer
-                </a>
+    <div class="row flex justify-content-start flex-wrap" id="gallery-images" data-gallery-id="{{ gallery.id }}"
+         data-csrf-token="{{ csrf_token('reorder_images_' ~ gallery.id) }}">
+        {% for image in gallery.images %}
+            <div class="col image-container draggable"
+                 style="width: 150px; flex: none; margin: 5px; cursor: move; border: 2px solid #ddd; border-radius: 8px; padding: 10px; background: white;"
+                 data-image-id="{{ image.id }}">
+
+                <div class="drag-handle" style="cursor: move; text-align: center; color: #666; margin-bottom: 5px;">
+                    ⋮⋮
+                </div>
+
+                <img src="{{ vich_uploader_asset(image, 'imageFile') | imagine_filter('thumb') }}"
+                     width="130"
+                     alt="Image"
+                     style="display: block; margin: 0 auto 10px;">
+
+                <div class="text-center">
+                    <small class="text-muted">Position: <span
+                                class="position-number">{{ image.position ?? loop.index }}</span></small>
+                </div>
+
+                <div class="text-center mt-2">
+                    <button type="button"
+                            class="btn btn-danger btn-sm delete-image-btn"
+                            data-image-id="{{ image.id }}"
+                            data-token="{{ csrf_token('delete' ~ image.id) }}">
+                        Supprimer
+                    </button>
+                </div>
             </div>
         {% endfor %}
     </div>
+
+    {% if gallery.images is empty %}
+        <div class="alert alert-info">
+            Aucune image dans cette galerie. Utilisez le champ ci-dessus pour ajouter des images.
+        </div>
+    {% endif %}
 </div>
-
-
 
 <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
 
 {{ form_end(form) }}
+
+<style>
+    .image-container.dragging {
+        opacity: 0.5;
+        transform: rotate(5deg);
+    }
+
+    .image-container.drag-over {
+        border-color: #007bff !important;
+        background-color: #f8f9fa !important;
+    }
+
+    .drag-handle {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .image-container:hover {
+        border-color: #007bff;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const galleryContainer = document.getElementById('gallery-images');
+        const galleryId = galleryContainer.dataset.galleryId;
+        const csrfToken = galleryContainer.dataset.csrfToken;
+
+        if (!galleryId) return; // Pas de galerie existante (création)
+
+        let draggedElement = null;
+
+        // Gestion du drag & drop
+        document.querySelectorAll('.draggable').forEach(item => {
+            item.draggable = true;
+
+            item.addEventListener('dragstart', function (e) {
+                draggedElement = this;
+                this.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            item.addEventListener('dragend', function () {
+                this.classList.remove('dragging');
+                draggedElement = null;
+            });
+
+            item.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+            });
+
+            item.addEventListener('dragenter', function (e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+
+            item.addEventListener('dragleave', function () {
+                this.classList.remove('drag-over');
+            });
+
+            item.addEventListener('drop', function (e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+
+                if (draggedElement && draggedElement !== this) {
+                    // Insérer l'élément déplacé avant l'élément de destination
+                    galleryContainer.insertBefore(draggedElement, this);
+                    updateOrder();
+                }
+            });
+        });
+
+        // Fonction pour mettre à jour l'ordre
+        function updateOrder() {
+            const imageIds = Array.from(galleryContainer.querySelectorAll('.image-container')).map(item =>
+                item.dataset.imageId
+            );
+
+            // Mettre à jour les numéros de position affichés
+            galleryContainer.querySelectorAll('.position-number').forEach((span, index) => {
+                span.textContent = index + 1;
+            });
+
+            // Envoyer la nouvelle ordre au serveur
+            fetch('/admin/gallery/' + galleryId + '/reorder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken
+                },
+                body: JSON.stringify({
+                    imageIds: imageIds
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        console.error('Erreur lors de la réorganisation:', data.error);
+                        // Optionnel: afficher un message d'erreur à l'utilisateur
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+        }
+
+        // Gestion de la suppression des images
+        document.querySelectorAll('.delete-image-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                if (!confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
+                    return;
+                }
+
+                const imageId = this.dataset.imageId;
+                const token = this.dataset.token;
+                const imageContainer = this.closest('.image-container');
+
+                fetch('/admin/image/' + imageId + '/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: '_token=' + encodeURIComponent(token)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            imageContainer.remove();
+                            updateOrder(); // Réorganiser après suppression
+                        } else {
+                            alert('Erreur lors de la suppression: ' + (data.error || 'Erreur inconnue'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        alert('Erreur lors de la suppression');
+                    });
+            });
+        });
+    });
+</script>

@@ -41,6 +41,7 @@ class Gallery
      * @var Collection<int, Image>
      */
     #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'gallery', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => 'ASC', 'id' => 'ASC'])]
     private Collection $images;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'galleries')]
@@ -215,5 +216,36 @@ class Gallery
         $this->visibleInNavigation = $visibleInNavigation;
 
         return $this;
+    }
+
+    /**
+     * Obtient la prochaine position disponible pour une nouvelle image
+     */
+    private function getNextPosition(): int
+    {
+        $maxPosition = 0;
+        foreach ($this->images as $image) {
+            if ($image->getPosition() !== null && $image->getPosition() > $maxPosition) {
+                $maxPosition = $image->getPosition();
+            }
+        }
+        return $maxPosition + 1;
+    }
+
+    /**
+     * Réorganise les positions des images
+     */
+    public function reorderImages(array $imageIds): void
+    {
+        $position = 1;
+        foreach ($imageIds as $imageId) {
+            foreach ($this->images as $image) {
+                if ($image->getId() == $imageId) {
+                    $image->setPosition($position);
+                    $position++;
+                    break;
+                }
+            }
+        }
     }
 }

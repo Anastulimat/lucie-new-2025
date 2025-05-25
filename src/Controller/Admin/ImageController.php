@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Gallery;
 use App\Entity\Image;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,8 +27,29 @@ class ImageController extends AbstractController
         } else {
             return new JsonResponse(['error' => 'Token invalid'], 400);
         }
+    }
 
+    #[Route('admin/gallery/{id}/reorder', name: 'app_gallery_reorder_images', methods: ['POST'])]
+    public function reorderImages(Request $request, Gallery $gallery, EntityManagerInterface $entityManager): JsonResponse
+    {
+        if (!$this->isCsrfTokenValid('reorder_images_' . $gallery->getId(), $request->headers->get('X-CSRF-Token'))) {
+            return new JsonResponse(['success' => false, 'error' => 'Token CSRF invalide'], 400);
+        }
 
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['imageIds']) || !is_array($data['imageIds'])) {
+            return new JsonResponse(['success' => false, 'error' => 'Données invalides'], 400);
+        }
+
+        try {
+            $gallery->reorderImages($data['imageIds']);
+            $entityManager->flush();
+
+            return new JsonResponse(['success' => true]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['success' => false, 'error' => 'Erreur lors de la réorganisation'], 500);
+        }
     }
 
 }

@@ -39,6 +39,9 @@ class Image
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $position = null;
+
     public function __construct()
     {
         $this->galleries = new ArrayCollection();
@@ -131,5 +134,17 @@ class Image
     public function __toString(): string
     {
         return $this->filename ?? 'New Image';
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?int $position): static
+    {
+        $this->position = $position;
+
+        return $this;
     }
 }
