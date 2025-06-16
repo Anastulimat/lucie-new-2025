@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,7 +25,12 @@ class GalleryForm extends AbstractType
                 'required' => true,
             ])
             ->add('slug')
-            ->add('description')
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'attr' => [
+                    'rows' => 5,
+                ]
+            ])
             ->add('visibleInNavigation', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Afficher dans la navigation principale',
