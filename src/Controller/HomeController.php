@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Repository\GalleryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +16,10 @@ final class HomeController extends AbstractController
         $homeGallery = $galleryRepository->findOneBy(['slug' => 'home']);
         $images = $homeGallery->getImages();
 
+        /** @var Image[] $sortedImages */
         $sortedImages = $images->toArray();
-        usort($sortedImages, function($a, $b) {
-            return strcmp($a->getId(), $b->getId());
+        usort($sortedImages, function(Image $a, Image $b) {
+            return strcmp($a->getPosition(), $b->getPosition());
         });
 
         return $this->render('home/index.html.twig', [
