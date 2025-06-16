@@ -16,11 +16,19 @@ use Vich\UploaderBundle\Handler\UploadHandler;
 class ImageController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('admin/image/{id}/delete', name: 'app_image_delete', methods: ['DELETE'])]
+    #[Route('admin/image/{id}/delete', name: 'app_image_delete', methods: ['POST'])]
     public function delete(Image $image, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
+        // Essayer de lire JSON d'abord, puis les données POST
         $data = json_decode($request->getContent(), true);
-        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
+        if ($data === null) {
+            // Si pas de JSON, lire les données POST classiques
+            $token = $request->request->get('_token');
+        } else {
+            $token = $data['_token'] ?? null;
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $image->getId(), $token)) {
             $entityManager->remove($image);
             $entityManager->flush();
             return new JsonResponse(['success' => 1]);

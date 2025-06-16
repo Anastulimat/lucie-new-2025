@@ -1,4 +1,20 @@
 liip_imagine:
+    # Configuration du driver
+    driver: 'gd'
+
+    # Configuration des resolvers
+    resolvers:
+        default:
+            web_path:
+                web_root: '%kernel.project_dir%/public'
+                cache_prefix: 'media/cache'
+
+    # Configuration des loaders
+    loaders:
+        default:
+            filesystem:
+                data_root: '%kernel.project_dir%/public'
+
     filter_sets:
         # Filtres pour la galerie
         gallery_thumb:
