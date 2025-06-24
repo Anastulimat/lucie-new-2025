@@ -76,6 +76,17 @@
         height: calc(100vh - 82px);
     }
 
+    /* Ajouter du padding aux slides sur mobile */
+    .swiper-slide {
+        padding: 0 15px 0 15px; /* Ajustez cette valeur selon vos besoins */
+    }
+
+    /* Ajuster les images pour tenir compte du padding */
+    .swiper-slide img {
+        max-width: calc(100% - 30px); /* Soustrait le padding horizontal total */
+        max-height: calc(100% - 30px); /* Soustrait le padding vertical total */
+    }
+
     /* Cacher les flèches sur mobile */
     .swiper-button-next,
     .swiper-button-prev {

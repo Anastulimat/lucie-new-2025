@@ -14,7 +14,11 @@
         <div class="swiper-wrapper">
             {% for image in images %}
                 <div class="swiper-slide">
-                    <img src="{{ asset('uploads/images/' ~ image) | imagine_filter('gallery_large') }}" alt="{{ image }}">
+                    <img
+                            src="{{ asset('uploads/images/' ~ image) | imagine_filter('gallery_large') }}"
+                            alt="{{ image }}"
+                            loading="lazy"
+                    >
                 </div>
             {% endfor %}
         </div>
