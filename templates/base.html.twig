@@ -35,6 +35,23 @@
     <div class="menu-toggle" id="menu-toggle">☰</div>
     <nav>
         <ul id="nav-menu">
+            <li class="dropdown">
+                <a href="#">Commissions</a>
+                <div class="dropdown-content">
+                    <a href={{ path('app_gallery', {id: 16, slug: 'press-portratis'}) }}>Press Portraits</a>
+                    <a href={{ path('app_category', {slug: 'advertising'}) }}>Advertising</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href={{ path('app_category', {slug: 'editorial'}) }}>Editorials</a>
+            </li>
+            <li class="dropdown">
+                <a href="#">Projects</a>
+            </li>
+            <li><a href="https://www.instagram.com/luciesassiat/" target="_blank">Instagram</a></li>
+            <li><a href="{{ path('app_contact') }}">Contact</a></li>
+        </ul>
+        {#<ul id="nav-menu">
             {% for category in categories %}
                 <li class="dropdown">
                     <a href="#">{{ category.title }}</a>
@@ -47,7 +64,7 @@
             {% endfor %}
             <li><a href="https://www.instagram.com/luciesassiat/" target="_blank">Instagram</a></li>
             <li><a href="{{ path('app_contact') }}">Contact</a></li>
-        </ul>
+        </ul>#}
     </nav>
 </header>
 
