@@ -1,0 +1,87 @@
+.album .responsive-container-block {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    justify-content: flex-start;
+    box-sizing: border-box;
+}
+
+.album .responsive-container-block.bg {
+    /*max-width: 1320px;*/
+    justify-content: space-between;
+}
+
+/* Colonne (3 sur desktop) */
+.album .responsive-container-block.img-cont {
+    display: flex;
+    flex-direction: column;
+    width: 32.5%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Image par défaut */
+.album .img {
+    width: 100%;
+    margin: 0 0 20px 0;
+    height: auto;
+    display: block;
+}
+
+/* Image plus grande (colonne du milieu) */
+.album .img.img-big {
+    margin: 0 0 16px 0;
+    width: 100%;
+}
+
+/* Dernière image de la colonne */
+.album .img.img-last {
+    margin-bottom: 5px;
+}
+
+/* 📱 Tablette (2 colonnes) */
+@media (max-width: 1024px) {
+    .album .responsive-container-block.bg {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .album .responsive-container-block.img-cont {
+        width: 48.5%;
+        margin-bottom: 20px;
+    }
+
+    .album .img {
+        margin: 0 0 18px 0;
+    }
+}
+
+/* 📱 Mobile (<768px) = 1 colonne en pile */
+@media (max-width: 768px) {
+    .album .responsive-container-block.bg {
+        flex-direction: column;
+    }
+
+    .album .responsive-container-block.img-cont {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .album .img {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 0 25px 0;
+    }
+
+    .album .img.img-big {
+        width: 100%;
+        margin: 0 0 25px 0;
+    }
+
+    .album .img.img-last {
+        margin-bottom: 5px;
+    }
+}

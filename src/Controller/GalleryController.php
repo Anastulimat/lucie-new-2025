@@ -23,4 +23,32 @@ final class GalleryController extends AbstractController
         ]);
     }
 
+    #[Route('/gallery-v2/{id}/{slug}', name: 'app_gallery_v2', requirements: ['id' => '\d+'])]
+    public function displayV2(int $id, string $slug, GalleryRepository $galleryRepository): Response
+    {
+        $gallery = $galleryRepository->findOneBy(['id' => $id, 'slug' => $slug]);
+
+        if (!$gallery) {
+            throw $this->createNotFoundException('La galerie demandée n\'existe pas.');
+        }
+
+        return $this->render('gallery/gallery-v2.html.twig', [
+            'gallery' => $gallery,
+        ]);
+    }
+
+    #[Route('/gallery-v3/{id}/{slug}', name: 'app_gallery_v3', requirements: ['id' => '\d+'])]
+    public function displayV3(int $id, string $slug, GalleryRepository $galleryRepository): Response
+    {
+        $gallery = $galleryRepository->findOneBy(['id' => $id, 'slug' => $slug]);
+
+        if (!$gallery) {
+            throw $this->createNotFoundException('La galerie demandée n\'existe pas.');
+        }
+
+        return $this->render('gallery/gallery-v3.html.twig', [
+            'gallery' => $gallery,
+        ]);
+    }
+
 }

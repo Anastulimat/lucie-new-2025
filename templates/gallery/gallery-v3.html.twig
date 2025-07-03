@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ gallery.title }}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .gallery-item img {
+            object-fit: cover !important;
+        }
+    </style>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"
+    />
+    <link rel="stylesheet" href="{{ asset('css/leftSide.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="main-content">
+        <div class="project-info">
+            <h1 class="project-title">{{ gallery.title|upper }}</h1>
+            <p class="project-description">{{ gallery.description|nl2br }}</p>
+        </div>
+
+        <div class="gallery-section">
+            <div class="gallery-grid">
+                {% for image in gallery.images %}
+                    <div class="gallery-item">
+                        <a
+                                href="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_large') }}"
+                                data-fancybox="gallery"
+                                data-caption="{{ image.altText ?? gallery.title }}"
+                        >
+                            <img
+                                    src="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }}"
+                                    alt="{{ image.altText ?? gallery.title }}"
+                                    srcset="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }} 400w,
+                                            {{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_medium') }} 800w"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                    loading="lazy"
+                            />
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="gallery-item">
+                        <p>Aucune image disponible pour cette galerie.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialisation de Fancybox
+            Fancybox.bind('[data-fancybox="gallery"]', {});
+        });
+    </script>
+{% endblock %}
