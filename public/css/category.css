@@ -22,7 +22,7 @@
 }
 
 .masonry-grid > .grid-item-link {
-    height: 600px;
+    height: 700px;
 }
 
 .grid-item {
@@ -52,7 +52,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 2rem;
+    padding: 1rem;
     pointer-events: none;
     z-index: 2;
 }
