@@ -18,10 +18,17 @@ final class GalleryController extends AbstractController
             throw $this->createNotFoundException('La galerie demandée n\'existe pas.');
         }
 
+        if ($id === 55) {
+            return $this->render('gallery/gallery-v3.html.twig', [
+                'gallery' => $gallery,
+            ]);
+        }
+
         return $this->render('gallery/gallery-v2.html.twig', [
             'gallery' => $gallery,
         ]);
     }
+
 
     #[Route('/gallery-v2/{id}/{slug}', name: 'app_gallery_v2', requirements: ['id' => '\d+'])]
     public function displayV2(int $id, string $slug, GalleryRepository $galleryRepository): Response
