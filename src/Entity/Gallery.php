@@ -86,6 +86,9 @@ class Gallery
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $position = null;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -317,5 +320,17 @@ class Gallery
                 }
             }
         }
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?int $position): static
+    {
+        $this->position = $position;
+
+        return $this;
     }
 }

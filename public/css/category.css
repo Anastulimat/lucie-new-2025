@@ -29,7 +29,7 @@
 /*}*/
 
 .masonry-grid > .grid-item-link {
-    height: 500px; /* Default height for all items */
+    height: 600px; /* Default height for all items */
 }
 
 /*.masonry-grid > .grid-item-link:nth-child(2),*/

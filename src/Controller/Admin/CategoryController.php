@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Category;
+use App\Entity\Gallery;
 use App\Form\CategoryForm;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -68,11 +69,16 @@ final class CategoryController extends AbstractController
             return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        // Récupérer les galeries triées par position
+        $galleries = $category->getGalleries();
+
         return $this->render('admin/category/edit.html.twig', [
             'category' => $category,
             'form' => $form,
+            'galleries' => $galleries,
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_category_delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
@@ -93,4 +99,29 @@ final class CategoryController extends AbstractController
 
         return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/update-gallery-order', name: 'app_category_update_gallery_order', methods: ['POST'])]
+    public function updateGalleryOrder(Request $request, Category $category, EntityManagerInterface $entityManager): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['galleryOrder']) || !is_array($data['galleryOrder'])) {
+            return $this->json(['error' => 'Invalid data format'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $galleryRepository = $entityManager->getRepository(Gallery::class);
+
+        foreach ($data['galleryOrder'] as $position => $galleryId) {
+            $gallery = $galleryRepository->find($galleryId);
+
+            if ($gallery && $gallery->getCategory()->getId() === $category->getId()) {
+                $gallery->setPosition($position);
+            }
+        }
+
+        $entityManager->flush();
+
+        return $this->json(['success' => true]);
+    }
+
 }
