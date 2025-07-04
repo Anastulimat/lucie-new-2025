@@ -32,6 +32,12 @@ final class GalleryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Gestion de l'image mise en avant
+            $featuredImageFile = $form->get('featuredImageFile')->getData();
+            if ($featuredImageFile) {
+                $gallery->setFeaturedImageFile($featuredImageFile);
+            }
+
             $entityManager->persist($gallery);
             $entityManager->flush();
 
@@ -60,6 +66,12 @@ final class GalleryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Gestion de l'image mise en avant
+            $featuredImageFile = $form->get('featuredImageFile')->getData();
+            if ($featuredImageFile) {
+                $gallery->setFeaturedImageFile($featuredImageFile);
+            }
+
             $entityManager->flush();
 
             $this->addFlash('success', 'La gallery "' . $gallery->getTitle() . '" a été modifiée avec succès !');

@@ -12,12 +12,25 @@
         <div class="container">
             <div class="masonry-grid">
                 {% for gallery in galleries %}
-                    {% set image = gallery.featuredImage ?? gallery.images|first %}
+                    {% set image = gallery.featuredImageFilename ?? gallery.images|first %}
 
                     {% if image %}
-                        <a href="{{ path('app_gallery', { id: gallery.id, slug: gallery.slug }) }}" class="grid-item-link">
+                        <a href="{{ path('app_gallery', { id: gallery.id, slug: gallery.slug }) }}"
+                           class="grid-item-link">
                             <div class="grid-item">
-                                <img src="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_large') }}" alt="{{ gallery.title|default('Image') }}">
+                                {% if gallery.hasFeaturedImage is defined and gallery.featuredImageFilename is not null %}
+                                    {# Chemin pour les images mises en avant #}
+                                    <img
+                                            src="{{ asset('uploads/gallery_featured_images/' ~ image) | imagine_filter('gallery_large') }}"
+                                            alt="{{ gallery.title|default('Image') }}"
+                                    >
+                                {% else %}
+                                    {# Chemin pour les images normales #}
+                                    <img
+                                            src="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_large') }}"
+                                            alt="{{ gallery.title|default('Image') }}"
+                                    >
+                                {% endif %}
                                 <div class="caption">
                                     <div class="brand-name">{{ gallery.title }}</div>
                                     {% if gallery.description %}

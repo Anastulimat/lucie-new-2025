@@ -24,7 +24,55 @@
     {{ form_row(form.category) }}
 </div>
 
+<!-- Section Image mise en avant -->
 <div class="mb-3">
+    <h5>Image mise en avant</h5>
+
+    {% if gallery.hasFeaturedImage %}
+        <div class="current-featured-image mb-3">
+            <div class="row">
+                <div class="col-md-3">
+                    <img src="{{ asset('uploads/gallery_featured_images/' ~ gallery.featuredImageFilename) }}"
+                         alt="Image mise en avant"
+                         class="img-fluid rounded"
+                         style="max-width: 200px;">
+                </div>
+                <div class="col-md-9">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> Une image mise en avant est définie pour cette galerie.
+                    </div>
+                    <p class="text-muted">
+                        <small>Vous pouvez changer l'image mise en avant en sélectionnant un nouveau fichier ci-dessous.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% elseif gallery.images is not empty %}
+        <div class="fallback-featured-image mb-3">
+            <div class="row">
+                <div class="col-md-3">
+                    <img src="{{ vich_uploader_asset(gallery.images.first, 'imageFile') | imagine_filter('thumb') }}"
+                         alt="Première image de la galerie"
+                         class="img-fluid rounded"
+                         style="max-width: 200px; opacity: 0.7;">
+                </div>
+                <div class="col-md-9">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle"></i> Aucune image mise en avant n'est définie.
+                        La première image de la galerie sera utilisée par défaut.
+                    </div>
+                    <p class="text-muted">
+                        <small>Pour définir une image mise en avant spécifique, sélectionnez un fichier ci-dessous.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Aucune image mise en avant n'est définie et la galerie ne contient aucune image.
+        </div>
+    {% endif %}
+
     {{ form_row(form.featuredImageFile) }}
 </div>
 
@@ -101,6 +149,18 @@
     .image-container:hover {
         border-color: #007bff;
         box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25);
+    }
+
+    .current-featured-image img {
+        border: 3px solid #28a745;
+    }
+
+    .fallback-featured-image img {
+        border: 2px dashed #ffc107;
+    }
+
+    .alert {
+        margin-bottom: 0.5rem;
     }
 </style>
 
@@ -205,9 +265,9 @@
                 fetch('/admin/image/' + imageId + '/delete', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',  // Changé ici
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({                   // Changé ici
+                    body: JSON.stringify({
                         '_token': token
                     })
                 })

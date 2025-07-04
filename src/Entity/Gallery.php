@@ -9,10 +9,13 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: GalleryRepository::class)]
 #[UniqueEntity(fields: ['title'], message: 'Une galerie avec ce titre existe déjà')]
 #[UniqueEntity(fields: ['slug'], message: 'Ce slug est déjà utilisé')]
+#[Vich\Uploadable]
 class Gallery
 {
     #[ORM\Id]
@@ -73,6 +76,16 @@ class Gallery
     #[ORM\Column]
     private ?bool $visibleInNavigation = null;
 
+    // Nouveaux champs pour l'image mise en avant
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $featuredImageFilename = null;
+
+    #[Vich\UploadableField(mapping: 'gallery_featured_images', fileNameProperty: 'featuredImageFilename')]
+    private ?File $featuredImageFile = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -91,7 +104,6 @@ class Gallery
     public function setTitle(string $title): static
     {
         $this->title = trim($title);
-
         return $this;
     }
 
@@ -103,7 +115,6 @@ class Gallery
     public function setDescription(?string $description): static
     {
         $this->description = $description !== null ? trim($description) : null;
-
         return $this;
     }
 
@@ -121,19 +132,16 @@ class Gallery
             $this->images->add($image);
             $image->setGallery($this);
         }
-
         return $this;
     }
 
     public function removeImage(Image $image): static
     {
         if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
             if ($image->getGallery() === $this) {
                 $image->setGallery(null);
             }
         }
-
         return $this;
     }
 
@@ -145,7 +153,6 @@ class Gallery
     public function setFeaturedImage(?Image $featuredImage): static
     {
         $this->featuredImage = $featuredImage;
-
         return $this;
     }
 
@@ -157,7 +164,6 @@ class Gallery
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
-
         return $this;
     }
 
@@ -169,8 +175,71 @@ class Gallery
     public function setSlug(string $slug): static
     {
         $this->slug = trim(strtolower($slug));
-
         return $this;
+    }
+
+    // Nouveaux getters/setters pour l'image mise en avant
+    public function getFeaturedImageFilename(): ?string
+    {
+        return $this->featuredImageFilename;
+    }
+
+    public function setFeaturedImageFilename(?string $featuredImageFilename): static
+    {
+        $this->featuredImageFilename = $featuredImageFilename;
+        return $this;
+    }
+
+    public function getFeaturedImageFile(): ?File
+    {
+        return $this->featuredImageFile;
+    }
+
+    public function setFeaturedImageFile(?File $featuredImageFile): static
+    {
+        $this->featuredImageFile = $featuredImageFile;
+        if ($featuredImageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * Méthode pour obtenir l'image mise en avant (fichier uploadé) ou la première image de la galerie
+     */
+    public function getDisplayFeaturedImage(): ?string
+    {
+        // Si une image mise en avant est uploadée, on l'utilise
+        if ($this->featuredImageFilename) {
+            return $this->featuredImageFilename;
+        }
+
+        // Sinon, on utilise la première image de la galerie
+        if (!$this->images->isEmpty()) {
+            $firstImage = $this->images->first();
+            return $firstImage->getFilename();
+        }
+
+        return null;
+    }
+
+    /**
+     * Vérifie si la galerie a une image mise en avant définie
+     */
+    public function hasFeaturedImage(): bool
+    {
+        return $this->featuredImageFilename !== null;
     }
 
     /**
@@ -197,10 +266,12 @@ class Gallery
 
     public function setImagesFiles(?array $imagesFiles): static
     {
-        foreach ($imagesFiles as $imagesFile) {
-            $image = new Image();
-            $image->setImageFile($imagesFile);
-            $this->addImage($image);
+        if ($imagesFiles) {
+            foreach ($imagesFiles as $imagesFile) {
+                $image = new Image();
+                $image->setImageFile($imagesFile);
+                $this->addImage($image);
+            }
         }
         $this->imagesFiles = $imagesFiles;
         return $this;
@@ -214,7 +285,6 @@ class Gallery
     public function setVisibleInNavigation(bool $visibleInNavigation): static
     {
         $this->visibleInNavigation = $visibleInNavigation;
-
         return $this;
     }
 
