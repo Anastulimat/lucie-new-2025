@@ -31,8 +31,14 @@
                                             alt="{{ gallery.title|default('Image') }}"
                                     >
                                 {% endif %}
+
+                                {# Titre positionné selon le choix de l'utilisateur #}
+                                <div class="title-container {{ gallery.titlePositionClasses }}">
+                                    <h2 class="gallery-title">{{ gallery.title }}</h2>
+                                </div>
+
+                                {# Description au survol #}
                                 <div class="caption">
-                                    <div class="brand-name">{{ gallery.title }}</div>
                                     {% if gallery.description %}
                                         <div class="description">{{ gallery.description }}</div>
                                     {% endif %}

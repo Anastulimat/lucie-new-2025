@@ -70,7 +70,14 @@ final class CategoryController extends AbstractController
         }
 
         // Récupérer les galeries triées par position
-        $galleries = $category->getGalleries();
+        $galleries = $entityManager->getRepository(Gallery::class)
+            ->createQueryBuilder('g')
+            ->where('g.category = :category')
+            ->setParameter('category', $category)
+            ->orderBy('g.position', 'ASC')
+            ->addOrderBy('g.id', 'ASC') // Tri secondaire par ID pour assurer un ordre stable
+            ->getQuery()
+            ->getResult();
 
         return $this->render('admin/category/edit.html.twig', [
             'category' => $category,
@@ -83,7 +90,7 @@ final class CategoryController extends AbstractController
     #[Route('/{id}', name: 'app_category_delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $category->getId(), $request->getPayload()->getString('_token'))) {
             try {
                 $categoryName = $category->getTitle(); // Sauvegarder le nom avant suppression
                 $entityManager->remove($category);

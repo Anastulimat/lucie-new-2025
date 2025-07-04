@@ -8,6 +8,7 @@ use App\Entity\Image;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -60,6 +61,17 @@ class GalleryForm extends AbstractType
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'title',
+            ])
+            ->add('titlePosition', ChoiceType::class, [
+                'label' => 'Position du titre sur l\'image',
+                'choices' => Gallery::TITLE_POSITIONS,
+                'required' => true,
+                'expanded' => false,
+                'multiple' => false,
+                'attr' => [
+                    'class' => 'form-select'
+                ],
+                'help' => 'Choisissez où positionner le titre sur l\'image à la une'
             ])
             ->add('imagesFiles', FileType::class, [
                 'required' => false,

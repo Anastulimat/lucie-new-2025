@@ -89,6 +89,34 @@ class Gallery
     #[ORM\Column(nullable: true)]
     private ?int $position = null;
 
+
+    // Constantes pour les positions du titre
+    public const TITLE_POSITION_LEFT_TOP = 'left-top';
+    public const TITLE_POSITION_RIGHT_TOP = 'right-top';
+    public const TITLE_POSITION_CENTER_TOP = 'center-top';
+    public const TITLE_POSITION_CENTER = 'center';
+    public const TITLE_POSITION_LEFT_CENTER = 'left-center';
+    public const TITLE_POSITION_RIGHT_CENTER = 'right-center';
+    public const TITLE_POSITION_LEFT_BOTTOM = 'left-bottom';
+    public const TITLE_POSITION_RIGHT_BOTTOM = 'right-bottom';
+    public const TITLE_POSITION_CENTER_BOTTOM = 'center-bottom';
+
+    public const TITLE_POSITIONS = [
+        'En haut à gauche' => self::TITLE_POSITION_LEFT_TOP,
+        'En haut à droite' => self::TITLE_POSITION_RIGHT_TOP,
+        'En haut au centre' => self::TITLE_POSITION_CENTER_TOP,
+        'Au centre' => self::TITLE_POSITION_CENTER,
+        'Au centre à gauche' => self::TITLE_POSITION_LEFT_CENTER,
+        'Au centre à droite' => self::TITLE_POSITION_RIGHT_CENTER,
+        'En bas à gauche' => self::TITLE_POSITION_LEFT_BOTTOM,
+        'En bas à droite' => self::TITLE_POSITION_RIGHT_BOTTOM,
+        'En bas au centre' => self::TITLE_POSITION_CENTER_BOTTOM,
+    ];
+
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $titlePosition = self::TITLE_POSITION_CENTER_BOTTOM;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -332,5 +360,45 @@ class Gallery
         $this->position = $position;
 
         return $this;
+    }
+
+    public function getTitlePosition(): ?string
+    {
+        return $this->titlePosition;
+    }
+
+    public function setTitlePosition(string $titlePosition): static
+    {
+        if (!in_array($titlePosition, self::TITLE_POSITIONS)) {
+            throw new \InvalidArgumentException('Position de titre invalide');
+        }
+
+        $this->titlePosition = $titlePosition;
+        return $this;
+    }
+
+    public function getTitlePositionClasses(): string
+    {
+        $classes = [];
+
+        // Position horizontale
+        if (str_contains($this->titlePosition, 'left')) {
+            $classes[] = 'justify-content-start';
+        } elseif (str_contains($this->titlePosition, 'right')) {
+            $classes[] = 'justify-content-end';
+        } else {
+            $classes[] = 'justify-content-center';
+        }
+
+        // Position verticale
+        if (str_contains($this->titlePosition, 'top')) {
+            $classes[] = 'align-items-start';
+        } elseif (str_contains($this->titlePosition, 'bottom')) {
+            $classes[] = 'align-items-end';
+        } else {
+            $classes[] = 'align-items-center';
+        }
+
+        return implode(' ', $classes);
     }
 }
