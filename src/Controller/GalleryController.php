@@ -18,7 +18,7 @@ final class GalleryController extends AbstractController
             throw $this->createNotFoundException('La galerie demandée n\'existe pas.');
         }
 
-        return $this->render('gallery/index.html.twig', [
+        return $this->render('gallery/gallery-v2.html.twig', [
             'gallery' => $gallery,
         ]);
     }
