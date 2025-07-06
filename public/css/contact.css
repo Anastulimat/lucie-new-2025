@@ -5,7 +5,7 @@
     text-align: center;
     margin: 8rem auto 0 auto;
     color: black;
-    font-size: 0.875rem; /* sm:text-sm */
+    font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -44,9 +44,8 @@
 }
 
 @media (min-width: 640px) {
-
     .text-responsive {
-        font-size: 0.875rem; /* sm:text-sm */
+        font-size: 1.125rem; /* Augmenté de 0.875rem à 1.125rem */
     }
 }
 
@@ -57,32 +56,61 @@
         height: 12rem; /* lg:h-48 */
     }
     .text-responsive {
-        font-size: 1.125rem; /* lg:text-lg */
+        font-size: 1.25rem; /* Augmenté de 1.125rem à 1.25rem */
     }
 }
 
 .contact-text {
     text-align: center;
-    font-size: 0.75rem; /* xs:text-xs */
+    font-size: 0.875rem; /* Augmenté de 0.75rem à 0.875rem pour small screen */
+    line-height: 1.6; /* Ajout d'un line-height pour une meilleure lisibilité */
+    font-weight: 500; /* Ajout d'un effet gras moyen */
 }
 
 @media (min-width: 640px) {
     .contact-text {
-        font-size: 0.875rem; /* sm:text-sm */
+        font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
+        line-height: 1.6;
+        font-weight: 500;
     }
 }
 
 @media (min-width: 1024px) {
     .contact-text {
-        font-size: 1rem; /* lg:text-base */
+        font-size: 1.125rem; /* Augmenté de 1rem à 1.125rem */
+        line-height: 1.6;
+        font-weight: 500;
+    }
+}
+
+@media (min-width: 1280px) {
+    /* xl - Ajout d'une taille encore plus grande pour les très grands écrans */
+    .contact-text {
+        font-size: 1.25rem;
+        line-height: 1.7;
+        font-weight: 500;
     }
 }
 
 .contact-link {
     cursor: pointer;
+    font-size: inherit; /* Hérite de la taille du parent */
+    font-weight: 600; /* Augmenté de 500 à 600 pour plus de visibilité */
+    text-decoration: none;
+    transition: all 0.3s ease; /* Ajout d'une transition smooth */
 }
 
 .contact-link:hover {
+    text-decoration: underline;
+    transform: translateY(-1px); /* Léger effet de survol */
+}
+
+/* Style spécifique pour le lien Instagram */
+.instagram-link {
+    font-weight: 600; /* Plus gras pour Instagram */
+}
+
+.instagram-link:hover {
     text-decoration: underline;
 }
 
@@ -91,29 +119,34 @@
     letter-spacing: 0.05em; /* tracking-wide */
     margin-top: 1.5rem; /* mt-6 */
     margin-bottom: 1rem; /* mb-4 */
-    font-size: 0.75rem; /* xs:text-xs */
+    font-size: 0.875rem; /* Augmenté de 0.75rem à 0.875rem */
     text-align: center;
+    font-weight: 600; /* Ajout d'un effet gras */
 }
 
 @media (min-width: 640px) {
     .uppercase {
-        font-size: 0.875rem; /* sm:text-sm */
+        font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
+        font-weight: 600;
     }
 }
 
 @media (min-width: 1024px) {
     .uppercase {
-        font-size: 1rem; /* lg:text-base */
+        font-size: 1.125rem; /* Augmenté de 1rem à 1.125rem */
+        font-weight: 600;
     }
 }
 
 .contact-heading {
     text-align: center;
-    font-size: 0.875rem; /* sm:text-base */
+    font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
+    font-weight: 700; /* Augmenté de 600 à 700 pour plus de visibilité */
 }
 
 @media (min-width: 1024px) {
     .contact-heading {
-        font-size: 1.125rem; /* lg:text-lg */
+        font-size: 1.25rem; /* Augmenté de 1.125rem à 1.25rem */
+        font-weight: 700;
     }
 }
