@@ -4,7 +4,6 @@
     top: 80px; /* Hauteur du header */
     left: 0;
     right: 0;
-    /*bottom: 20px; !* Marge en bas *!*/
     width: 100%;
     height: calc(100vh - 100px); /* Prend tout l'espace disponible sous le header moins la marge du bas */
     z-index: 1;
@@ -71,24 +70,45 @@
 @media (max-width: 768px) {
     .swiper-container {
         top: 67px; /* Ajustement pour le header mobile */
-        /*bottom: 15px; !* Marge en bas plus petite sur mobile *!*/
-        height: calc(100vh - 82px);
+        bottom: 20px; /* Ajout d'une marge en bas */
+        height: calc(100vh - 50px); /* Ajustement de la hauteur pour inclure la marge */
+        left: 10px; /* Marge à gauche */
+        right: 10px; /* Marge à droite */
+        width: calc(100% - 20px); /* Largeur ajustée pour les marges */
     }
 
-    /* Ajouter du padding aux slides sur mobile */
+    /* Centrer le contenu des slides sur mobile */
     .swiper-slide {
-        padding: 0 15px 0 15px; /* Ajustez cette valeur selon vos besoins */
+        padding: 15px; /* Padding interne pour plus d'espace */
+        box-sizing: border-box;
     }
 
     /* Ajuster les images pour tenir compte du padding */
     .swiper-slide img {
-        max-width: calc(100% - 30px); /* Soustrait le padding horizontal total */
-        max-height: calc(100% - 30px); /* Soustrait le padding vertical total */
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
     }
 
     /* Cacher les flèches sur mobile */
     .swiper-button-next,
     .swiper-button-prev {
         display: none;
+    }
+}
+
+/* Pour les très petits écrans (moins de 480px) */
+@media (max-width: 480px) {
+    .swiper-container {
+        top: 67px;
+        bottom: 25px; /* Marge en bas plus importante */
+        height: calc(100vh - 92px);
+        left: 15px; /* Marges latérales plus importantes */
+        right: 15px;
+        width: calc(100% - 30px);
+    }
+
+    .swiper-slide {
+        padding: 20px; /* Padding plus important sur très petits écrans */
     }
 }
