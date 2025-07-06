@@ -22,9 +22,10 @@
     box-sizing: border-box;
 }
 
-/* Image par défaut */
+/* Image par défaut - SOLUTION CORRECTE */
 .album .img {
-    width: 100%;
+    max-width: 100%;    /* ← Au lieu de width: 100% */
+    width: auto;        /* ← Permet à l'image de garder ses proportions */
     margin: 0 0 20px 0;
     height: auto;
     display: block;
@@ -33,7 +34,8 @@
 /* Image plus grande (colonne du milieu) */
 .album .img.img-big {
     margin: 0 0 16px 0;
-    width: 100%;
+    max-width: 100%;    /* ← Au lieu de width: 100% */
+    width: auto;        /* ← Permet à l'image de garder ses proportions */
 }
 
 /* Dernière image de la colonne */
@@ -71,13 +73,13 @@
     }
 
     .album .img {
-        width: 100%;
+        width: 100%;        /* ← Sur mobile, on garde width: 100% */
         max-width: 100%;
         margin: 0 0 25px 0;
     }
 
     .album .img.img-big {
-        width: 100%;
+        width: 100%;        /* ← Sur mobile, on garde width: 100% */
         margin: 0 0 25px 0;
     }
 
