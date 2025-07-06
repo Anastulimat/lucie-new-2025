@@ -12,13 +12,14 @@
 
 /* Project title and description */
 .project-title {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 700;
     margin-bottom: 20px;
 }
 
 .project-description {
-    font-size: 14px;
+    font-size: 0.9rem;
+    font-weight: 500;
     line-height: 1.6;
 }
 
