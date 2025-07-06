@@ -25,6 +25,9 @@ class GalleryForm extends AbstractType
             ->add('title', TextType::class, [
                 'required' => true,
             ])
+            ->add('subtitle', TextType::class, [
+                'required' => false,
+            ])
             ->add('slug')
             ->add('description', TextareaType::class, [
                 'required' => false,

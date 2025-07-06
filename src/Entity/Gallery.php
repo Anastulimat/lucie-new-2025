@@ -117,6 +117,9 @@ class Gallery
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $titlePosition = self::TITLE_POSITION_CENTER_BOTTOM;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $subtitle = null;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -400,5 +403,17 @@ class Gallery
         }
 
         return implode(' ', $classes);
+    }
+
+    public function getSubtitle(): ?string
+    {
+        return $this->subtitle;
+    }
+
+    public function setSubtitle(?string $subtitle): static
+    {
+        $this->subtitle = $subtitle;
+
+        return $this;
     }
 }
