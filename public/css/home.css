@@ -100,7 +100,7 @@
 /* Pour les très petits écrans (moins de 480px) */
 @media (max-width: 480px) {
     .swiper-container {
-        top: 67px;
+        top: 40px;
         bottom: 25px; /* Marge en bas plus importante */
         height: calc(100vh - 92px);
         left: 15px; /* Marges latérales plus importantes */
