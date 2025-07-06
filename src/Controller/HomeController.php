@@ -16,14 +16,12 @@ final class HomeController extends AbstractController
         $homeGallery = $galleryRepository->findOneBy(['slug' => 'home']);
         $images = $homeGallery->getImages();
 
-        /** @var Image[] $sortedImages */
-        $sortedImages = $images->toArray();
-        usort($sortedImages, function(Image $a, Image $b) {
-            return strcmp($a->getPosition(), $b->getPosition());
-        });
+        /** @var Image[] $shuffledImages */
+        $shuffledImages = $images->toArray();
+        shuffle($shuffledImages); // Mélange aléatoire
 
         return $this->render('home/index.html.twig', [
-            'images' => $sortedImages,
+            'images' => $shuffledImages,
             'controller_name' => 'HomeController',
         ]);
     }
