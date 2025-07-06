@@ -3,22 +3,84 @@
 {% block title %}Home{% endblock %}
 
 {% block stylesheets %}
-
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    <style>
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-container img {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .image-container img.loaded {
+            opacity: 1;
+        }
+
+        .image-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .image-loader.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #000000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
-
-
     <div class="swiper-container">
         <div class="swiper-wrapper">
             {% for image in images %}
                 <div class="swiper-slide">
-                    <img
-                            src="{{ asset('uploads/images/' ~ image) | imagine_filter('gallery_large') }}"
-                            alt="{{ image }}"
-                            loading="lazy"
-                    >
+                    <div class="image-container">
+                        <div class="image-loader">
+                            <div class="spinner"></div>
+                            <div class="loader-text">Chargement...</div>
+                        </div>
+                        <img
+                                src="{{ asset('uploads/images/' ~ image) | imagine_filter('gallery_large') }}"
+                                alt="{{ image }}"
+                                loading="lazy"
+                                data-image-id="{{ loop.index }}"
+                        >
+                    </div>
                 </div>
             {% endfor %}
         </div>
@@ -26,4 +88,35 @@
         <div class="swiper-button-prev"></div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gérer le chargement des images
+            const images = document.querySelectorAll('.swiper-slide img');
+
+            images.forEach(function(img) {
+                const container = img.closest('.image-container');
+                const loader = container.querySelector('.image-loader');
+
+                img.addEventListener('load', function() {
+                    // Masquer le loader
+                    loader.classList.add('hidden');
+                    // Afficher l'image avec fade-in
+                    img.classList.add('loaded');
+                });
+
+                img.addEventListener('error', function() {
+                    // En cas d'erreur, masquer le loader et afficher un message
+                    loader.innerHTML = '<div style="color: #e74c3c;">Erreur de chargement</div>';
+                    setTimeout(() => {
+                        loader.classList.add('hidden');
+                    }, 2000);
+                });
+
+                // Si l'image est déjà en cache, déclencher l'événement load
+                if (img.complete) {
+                    img.dispatchEvent(new Event('load'));
+                }
+            });
+        });
+    </script>
 {% endblock %}
