@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: GalleryRepository::class)]
-#[UniqueEntity(fields: ['title'], message: 'Une galerie avec ce titre existe déjà')]
 #[UniqueEntity(fields: ['slug'], message: 'Ce slug est déjà utilisé')]
 #[Vich\Uploadable]
 class Gallery
