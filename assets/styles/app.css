@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'NeueHaasDisplay';
+    src: url('/assets/fonts/NeueHaasDisplay/NeueHaasDisplayThin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'NeueHaasDisplay';
+    src: url('/assets/fonts/NeueHaasDisplay/NeueHaasDisplayRoman.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'NeueHaasDisplay';
+    src: url('/assets/fonts/NeueHaasDisplay/NeueHaasDisplayBold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'NeueHaasDisplay';
+    src: url('/assets/fonts/NeueHaasDisplay/NeueHaasDisplayBoldItalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+}
