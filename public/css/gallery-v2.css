@@ -22,25 +22,41 @@
     box-sizing: border-box;
 }
 
-/* Image par défaut - SOLUTION CORRECTE */
-.album .img {
-    max-width: 100%;    /* ← Au lieu de width: 100% */
-    width: auto;        /* ← Permet à l'image de garder ses proportions */
-    margin: 0 0 20px 0;
-    height: auto;
+/* Cadre autour de chaque lien d'image */
+.album .responsive-container-block.img-cont > a {
     display: block;
-}
-
-/* Image plus grande (colonne du milieu) */
-.album .img.img-big {
-    margin: 0 0 16px 0;
-    max-width: 100%;    /* ← Au lieu de width: 100% */
-    width: auto;        /* ← Permet à l'image de garder ses proportions */
+    margin: 0 0 25px 0;      /* Espacement uniforme entre les cadres */
+    overflow: hidden;         /* Coupe ce qui dépasse du cadre */
+    /*border-radius: 4px;      !* Optionnel : coins légèrement arrondis *!*/
 }
 
 /* Dernière image de la colonne */
+.album .responsive-container-block.img-cont > a:last-child {
+    margin-bottom: 0;
+}
+
+/* Image par défaut - garde ses dimensions naturelles */
+.album .img {
+    width: 100%;
+    height: auto;            /* Hauteur automatique selon les proportions */
+    display: block;
+    margin: 0;               /* Pas de marge sur l'image */
+    box-sizing: border-box;
+}
+
+/* Image plus grande - garde ses dimensions naturelles */
+.album .img.img-big {
+    width: auto;             /* Largeur automatique */
+    max-width: 100%;
+    height: auto;            /* Hauteur automatique selon les proportions */
+    display: block;
+    margin: 0;               /* Pas de marge sur l'image */
+    box-sizing: border-box;
+}
+
+/* Classes img-last deviennent inutiles */
 .album .img.img-last {
-    margin-bottom: 5px;
+    margin: 0;
 }
 
 /* 📱 Tablette (2 colonnes) */
@@ -55,12 +71,12 @@
         margin-bottom: 20px;
     }
 
-    .album .img {
-        margin: 0 0 18px 0;
+    .album .responsive-container-block.img-cont > a {
+        margin: 0 0 20px 0;   /* Espacement tablette */
     }
 }
 
-/* 📱 Mobile (<768px) = 1 colonne en pile */
+/* 📱 Mobile (<768px) = 1 colonne */
 @media (max-width: 768px) {
     .album .responsive-container-block.bg {
         flex-direction: column;
@@ -72,18 +88,16 @@
         align-items: center;
     }
 
+    .album .responsive-container-block.img-cont > a {
+        margin: 0 0 30px 0;   /* Espacement mobile */
+    }
+
     .album .img {
-        width: 100%;        /* ← Sur mobile, on garde width: 100% */
+        width: 100%;
         max-width: 100%;
-        margin: 0 0 25px 0;
     }
 
     .album .img.img-big {
-        width: 100%;        /* ← Sur mobile, on garde width: 100% */
-        margin: 0 0 25px 0;
-    }
-
-    .album .img.img-last {
-        margin-bottom: 5px;
+        width: 100%;
     }
 }
