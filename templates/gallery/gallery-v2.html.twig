@@ -126,101 +126,27 @@
 
         <div class="gallery-section" id="gallerySection">
             <div class="album">
-                <div class="responsive-container-block bg">
+                <div class="responsive-container-block bg" id="galleryContainer">
                     {% if gallery.images %}
-                        {# Organiser les images par colonnes selon leur position #}
-                        {% set column1Images = [] %}
-                        {% set column2Images = [] %}
-                        {% set column3Images = [] %}
+                        {# Stocker les données des images pour JavaScript #}
+                        <div id="galleryData" style="display: none;"
+                             data-images="{{ gallery.images|length }}">
+                            {% for image in gallery.images %}
+                                <div class="image-data"
+                                     data-index="{{ loop.index0 }}"
+                                     data-position="{{ loop.index }}"
+                                     data-filename="{{ image.filename }}"
+                                     data-alt="{{ image.altText ?? gallery.title }}"
+                                     data-thumb="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }}"
+                                     data-medium="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_medium') }}">
+                                </div>
+                            {% endfor %}
+                        </div>
 
-                        {% for image in gallery.images %}
-                            {% set pos = loop.index %}
-                            {% if pos % 3 == 1 %} {# Position 1, 4, 7, 10, etc. #}
-                                {% set column1Images = column1Images|merge([{image: image, index: loop.index0}]) %}
-                            {% elseif pos % 3 == 2 %} {# Position 2, 5, 8, 11, etc. #}
-                                {% set column2Images = column2Images|merge([{image: image, index: loop.index0}]) %}
-                            {% else %} {# Position 3, 6, 9, 12, etc. #}
-                                {% set column3Images = column3Images|merge([{image: image, index: loop.index0}]) %}
-                            {% endif %}
-                        {% endfor %}
-
-                        {# Colonne 1 : positions 1, 4, 7, etc. #}
-                        {% if column1Images %}
-                            <div class="responsive-container-block img-cont">
-                                {% for item in column1Images %}
-                                    {% set image = item.image %}
-                                    {% set originalIndex = item.index %}
-                                    {% set isLast = loop.index == column1Images|length %}
-                                    <a
-                                            href="javascript:void(0);"
-                                            onclick="document.getElementById('fancybox-image-{{ originalIndex }}').click(); return false;"
-                                    >
-                                        <img
-                                                class="img{% if isLast %} img-last{% endif %}"
-                                                src="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }}"
-                                                alt="{{ image.altText ?? gallery.title }}"
-                                                srcset="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }} 400w,
-                                    {{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_medium') }} 800w"
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                                loading="lazy"
-                                                data-gallery-image
-                                        />
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-
-                        {# Colonne 2 : positions 2, 5, 8, etc. (images plus grandes) #}
-                        {% if column2Images %}
-                            <div class="responsive-container-block img-cont">
-                                {% for item in column2Images %}
-                                    {% set image = item.image %}
-                                    {% set originalIndex = item.index %}
-                                    {% set isLast = loop.index == column2Images|length %}
-                                    <a
-                                            href="javascript:void(0);"
-                                            onclick="document.getElementById('fancybox-image-{{ originalIndex }}').click(); return false;"
-                                    >
-                                        <img
-                                                class="img img-big{% if isLast %} img-last{% endif %}"
-                                                src="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }}"
-                                                alt="{{ image.altText ?? gallery.title }}"
-                                                srcset="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }} 400w,
-                                    {{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_medium') }} 800w"
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                                loading="lazy"
-                                                data-gallery-image
-                                        />
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-
-                        {# Colonne 3 : positions 3, 6, 9, etc. #}
-                        {% if column3Images %}
-                            <div class="responsive-container-block img-cont">
-                                {% for item in column3Images %}
-                                    {% set image = item.image %}
-                                    {% set originalIndex = item.index %}
-                                    {% set isLast = loop.index == column3Images|length %}
-                                    <a
-                                            href="javascript:void(0);"
-                                            onclick="document.getElementById('fancybox-image-{{ originalIndex }}').click(); return false;"
-                                    >
-                                        <img
-                                                class="img{% if isLast %} img-last{% endif %}"
-                                                src="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }}"
-                                                alt="{{ image.altText ?? gallery.title }}"
-                                                srcset="{{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_thumb') }} 400w,
-                                    {{ asset('uploads/images/' ~ image.filename) | imagine_filter('gallery_medium') }} 800w"
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                                loading="lazy"
-                                                data-gallery-image
-                                        />
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                        {# Les colonnes seront générées par JavaScript #}
+                        <div class="responsive-container-block img-cont" id="column1"></div>
+                        <div class="responsive-container-block img-cont" id="column2"></div>
+                        <div class="responsive-container-block img-cont" id="column3"></div>
                     {% else %}
                         <div class="responsive-container-block img-cont">
                             <p>Aucune image disponible pour cette galerie.</p>
@@ -240,9 +166,140 @@
             const gallerySection = document.getElementById('gallerySection');
             const progressBar = document.getElementById('progressBar');
             const loadingProgress = document.getElementById('loadingProgress');
-            const images = document.querySelectorAll('[data-gallery-image]');
-            const totalImages = images.length;
+            const galleryData = document.getElementById('galleryData');
 
+            // Si aucune donnée de galerie, sortir
+            if (!galleryData) {
+                if (loader) loader.style.display = 'none';
+                if (gallerySection) gallerySection.classList.add('loaded');
+                return;
+            }
+
+            // Récupérer les données des images
+            const imageDataElements = galleryData.querySelectorAll('.image-data');
+            const imagesData = Array.from(imageDataElements).map(el => ({
+                index: parseInt(el.getAttribute('data-index')),
+                position: parseInt(el.getAttribute('data-position')),
+                filename: el.getAttribute('data-filename'),
+                alt: el.getAttribute('data-alt'),
+                thumb: el.getAttribute('data-thumb'),
+                medium: el.getAttribute('data-medium')
+            }));
+
+            const totalImages = imagesData.length;
+
+            // Colonnes
+            const column1 = document.getElementById('column1');
+            const column2 = document.getElementById('column2');
+            const column3 = document.getElementById('column3');
+
+            // Fonction pour distribuer les images dans les colonnes
+            function distributeImages() {
+                // Vider les colonnes
+                column1.innerHTML = '';
+                column2.innerHTML = '';
+                column3.innerHTML = '';
+
+                // Afficher toutes les colonnes
+                column1.style.display = 'flex';
+                column2.style.display = 'flex';
+                column3.style.display = 'flex';
+
+                // Distribuer les images selon leur position
+                imagesData.forEach(imageData => {
+                    const position = imageData.position;
+                    const isBig = position % 3 === 2; // Position 2, 5, 8, etc.
+
+                    // Créer le lien et l'image
+                    const link = document.createElement('a');
+                    link.href = 'javascript:void(0);';
+                    link.onclick = function() {
+                        document.getElementById(`fancybox-image-${imageData.index}`).click();
+                        return false;
+                    };
+                    link.setAttribute('data-position', position);
+                    link.className = 'image-link';
+
+                    const img = document.createElement('img');
+                    img.className = `img${isBig ? ' img-big' : ''}`;
+                    img.src = imageData.thumb;
+                    img.alt = imageData.alt;
+                    img.setAttribute('srcset', `${imageData.thumb} 400w, ${imageData.medium} 800w`);
+                    img.setAttribute('sizes', '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw');
+                    img.setAttribute('loading', 'lazy');
+                    img.setAttribute('data-gallery-image', '');
+
+                    link.appendChild(img);
+
+                    // Ajouter à la colonne appropriée
+                    if (position % 3 === 1) { // Position 1, 4, 7, etc.
+                        column1.appendChild(link);
+                    } else if (position % 3 === 2) { // Position 2, 5, 8, etc.
+                        column2.appendChild(link);
+                    } else { // Position 3, 6, 9, etc.
+                        column3.appendChild(link);
+                    }
+                });
+            }
+
+            // Fonction pour afficher en une seule colonne sur mobile
+            function displayAsSingleColumn() {
+                // Vider les colonnes
+                column1.innerHTML = '';
+                column2.innerHTML = '';
+                column3.innerHTML = '';
+
+                // Masquer les colonnes 2 et 3
+                column1.style.display = 'flex';
+                column2.style.display = 'none';
+                column3.style.display = 'none';
+
+                // Trier les images par position
+                const sortedImages = [...imagesData].sort((a, b) => a.position - b.position);
+
+                // Ajouter toutes les images à la première colonne
+                sortedImages.forEach(imageData => {
+                    const isBig = imageData.position % 3 === 2; // Position 2, 5, 8, etc.
+
+                    const link = document.createElement('a');
+                    link.href = 'javascript:void(0);';
+                    link.onclick = function() {
+                        document.getElementById(`fancybox-image-${imageData.index}`).click();
+                        return false;
+                    };
+                    link.setAttribute('data-position', imageData.position);
+                    link.className = 'image-link';
+
+                    const img = document.createElement('img');
+                    img.className = 'img'; // Toutes les images ont la même taille sur mobile
+                    img.src = imageData.thumb;
+                    img.alt = imageData.alt;
+                    img.setAttribute('srcset', `${imageData.thumb} 400w, ${imageData.medium} 800w`);
+                    img.setAttribute('sizes', '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw');
+                    img.setAttribute('loading', 'lazy');
+                    img.setAttribute('data-gallery-image', '');
+
+                    link.appendChild(img);
+                    column1.appendChild(link);
+                });
+            }
+
+            // Fonction pour gérer la disposition selon la taille de l'écran
+            function handleLayout() {
+                if (window.innerWidth <= 768) {
+                    displayAsSingleColumn();
+                } else {
+                    distributeImages();
+                }
+            }
+
+            // Initialiser la disposition
+            handleLayout();
+
+            // Écouter les changements de taille d'écran
+            window.addEventListener('resize', handleLayout);
+
+            // Gestion du chargement des images
             let loadedImages = 0;
             let allImagesLoaded = false;
 
@@ -270,7 +327,9 @@
                             // Animer l'apparition des colonnes
                             const columns = document.querySelectorAll('.img-cont');
                             columns.forEach(column => {
-                                column.classList.add('fade-in');
+                                if (column.style.display !== 'none') {
+                                    column.classList.add('fade-in');
+                                }
                             });
                         }, 300);
                     }, 500);
@@ -278,44 +337,43 @@
             }
 
             // Fonction pour vérifier si une image est chargée
-            function isImageLoaded(img) {
-                return img.complete && img.naturalHeight !== 0;
-            }
+            function checkImagesLoaded() {
+                const images = document.querySelectorAll('[data-gallery-image]');
 
-            // Fonction pour traiter le chargement d'une image
-            function handleImageLoad() {
-                loadedImages++;
-                updateProgress();
-
-                if (loadedImages === totalImages) {
+                if (images.length === 0) {
                     allImagesLoaded = true;
                     hideLoader();
+                    return;
                 }
-            }
 
-            // Si aucune image, masquer le loader immédiatement
-            if (totalImages === 0) {
-                hideLoader();
-                return;
+                let loaded = 0;
+
+                function imageLoaded() {
+                    loaded++;
+                    loadedImages = loaded;
+                    updateProgress();
+
+                    if (loaded === images.length) {
+                        allImagesLoaded = true;
+                        hideLoader();
+                    }
+                }
+
+                images.forEach(img => {
+                    if (img.complete) {
+                        imageLoaded();
+                    } else {
+                        img.addEventListener('load', imageLoaded);
+                        img.addEventListener('error', imageLoaded);
+                    }
+                });
             }
 
             // Initialiser la barre de progression
             updateProgress();
 
-            // Surveiller le chargement de chaque image
-            images.forEach((img, index) => {
-                if (isImageLoaded(img)) {
-                    // Image déjà chargée (cache)
-                    handleImageLoad();
-                } else {
-                    // Écouter les événements de chargement
-                    img.addEventListener('load', handleImageLoad);
-                    img.addEventListener('error', function() {
-                        console.warn(`Erreur de chargement pour l'image ${index + 1}`);
-                        handleImageLoad(); // Continuer même en cas d'erreur
-                    });
-                }
-            });
+            // Vérifier le chargement des images après leur création
+            setTimeout(checkImagesLoaded, 100);
 
             // Timeout de sécurité (masquer le loader après 10 secondes max)
             setTimeout(() => {
@@ -326,10 +384,8 @@
                 }
             }, 10000);
 
-            // Initialisation de Fancybox après le chargement
-            setTimeout(() => {
-                Fancybox.bind('[data-fancybox="gallery"]', {});
-            }, 100);
+            // Initialisation de Fancybox
+            Fancybox.bind('[data-fancybox="gallery"]', {});
         });
     </script>
 {% endblock %}
