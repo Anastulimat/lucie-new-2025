@@ -20,10 +20,16 @@ final class HomeController extends AbstractController
         $shuffledImages = $images->toArray();
         shuffle($shuffledImages); // Mélange aléatoire
 
+        $response = new Response();
+        $response->setCache([
+            'max_age' => 3600, // 1 heure
+            'public' => true,
+        ]);
+
         return $this->render('home/index.html.twig', [
             'images' => $shuffledImages,
             'controller_name' => 'HomeController',
-        ]);
+        ], $response);
     }
 
     #[Route('/contact', name: 'app_contact')]
