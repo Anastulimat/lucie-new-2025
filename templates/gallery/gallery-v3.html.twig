@@ -19,7 +19,7 @@
     <div class="main-content">
         <div class="project-info">
             <h1 class="project-title">{{ gallery.title|upper }}</h1>
-            <p class="project-description">{{ gallery.description|nl2br }}</p>
+            <p class="project-description">{{ gallery.description|raw|nl2br }}</p>
         </div>
 
         <div class="gallery-section">
