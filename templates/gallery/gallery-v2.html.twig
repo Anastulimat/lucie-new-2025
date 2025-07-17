@@ -55,7 +55,7 @@
         .loader-progress-bar {
             height: 100%;
             background: #000000;
-            width: 0%;
+            width: 0;
             transition: width 0.3s ease;
         }
 
@@ -109,7 +109,7 @@
     <div class="main-content">
         <div class="project-info">
             <h1 class="project-title">{{ gallery.title|upper }}</h1>
-            <p class="project-description">{{ gallery.description|nl2br }}</p>
+            <p class="project-description">{{ gallery.description|raw }}</p>
         </div>
 
         {# Créer des liens invisibles pour Fancybox dans l'ordre original #}

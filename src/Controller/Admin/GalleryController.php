@@ -81,6 +81,7 @@ final class GalleryController extends AbstractController
         return $this->render('admin/gallery/edit.html.twig', [
             'gallery' => $gallery,
             'form' => $form,
+            'tinymce_api_key' => $this->getParameter('tinymce_api_key'),
         ]);
     }
 

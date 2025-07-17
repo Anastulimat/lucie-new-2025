@@ -32,7 +32,7 @@
                 <th scope="col">Slug</th>
                 <th scope="col">Catégorie</th>
                 <th scope="col">Nbr Images</th>
-                <th scope="col">Description</th>
+{#                <th scope="col">Description</th>#}
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -50,9 +50,9 @@
                         {% endif %}
                     </td>
                     <td>{{ gallery.images|length }}</td>
-                    <td>
-                        {{ gallery.description|slice(0, 100) }}{% if gallery.description|length > 100 %}…{% endif %}
-                    </td>
+{#                    <td>#}
+{#                        {{ gallery.description|raw|slice(0, 100) }}{% if gallery.description|length > 100 %}…{% endif %}#}
+{#                    </td>#}
 
                     <td>
                         <div class="btn-group" role="group">
