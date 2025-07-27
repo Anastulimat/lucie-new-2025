@@ -3,8 +3,8 @@
 .contact-info {
     height: auto;
     text-align: center;
-    margin: 8rem auto 0 auto;
-    color: black;
+    margin: 5rem auto 4rem auto; /* Ajouté margin-bottom de 4rem */
+    color: #131212;
     font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
     display: flex;
     flex-direction: column;
@@ -27,7 +27,7 @@
 }
 
 .contact-image-wrapper {
-    padding-bottom: 1.5rem; /* pb-6 */
+    padding-bottom: 2.5rem; /* Augmenté de 1.5rem à 2.5rem */
     margin-top: 1rem; /* mt-4 */
     display: flex;
     align-items: center;
@@ -35,15 +35,19 @@
 }
 
 .contact-image {
-    width: 8rem; /* sm:w-32 */
-    height: 8rem; /* sm:h-32 */
-    border-radius: 50%;
+    width: 18rem; /* Augmenté de 14rem à 18rem pour mobile */
+    height: 22rem; /* Augmenté de 17rem à 22rem pour mobile */
+    border-radius: 0; /* Rectangle */
     object-fit: cover;
     border: 1px solid #D1D5DB; /* ring-stone-200 */
     /* Responsive sizes */
 }
 
 @media (min-width: 640px) {
+    .contact-image {
+        width: 20rem; /* Légèrement augmenté */
+        height: 25rem; /* Légèrement augmenté */
+    }
     .text-responsive {
         font-size: 1.125rem; /* Augmenté de 0.875rem à 1.125rem */
     }
@@ -52,52 +56,59 @@
 @media (min-width: 1024px) {
     /* lg */
     .contact-image {
-        width: 12rem; /* lg:w-48 */
-        height: 12rem; /* lg:h-48 */
+        width: 24rem; /* Largeur augmentée */
+        height: 30rem; /* Hauteur proportionnelle */
     }
     .text-responsive {
         font-size: 1.25rem; /* Augmenté de 1.125rem à 1.25rem */
     }
 }
 
+@media (min-width: 1280px) {
+    .contact-image {
+        width: 28rem; /* Largeur augmentée */
+        height: 35rem; /* Hauteur proportionnelle (ratio ~1.25) */
+    }
+}
+
 .contact-text {
     text-align: center;
-    font-size: 0.875rem; /* Augmenté de 0.75rem à 0.875rem pour small screen */
-    line-height: 1.6; /* Ajout d'un line-height pour une meilleure lisibilité */
-    font-weight: 500; /* Ajout d'un effet gras moyen */
+    font-size: 1rem;
+    line-height: 1.6;
+    font-weight: 400;
 }
 
 @media (min-width: 640px) {
     .contact-text {
         font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
         line-height: 1.6;
-        font-weight: 500;
+        font-weight: 400; /* Changé de 500 à 300 pour une typo plus fine */
     }
 }
 
 @media (min-width: 1024px) {
     .contact-text {
-        font-size: 1.125rem; /* Augmenté de 1rem à 1.125rem */
+        font-size: 1rem; /* Augmenté de 1rem à 1.125rem */
         line-height: 1.6;
-        font-weight: 500;
+        font-weight: 400; /* Changé de 500 à 300 pour une typo plus fine */
     }
 }
 
 @media (min-width: 1280px) {
     /* xl - Ajout d'une taille encore plus grande pour les très grands écrans */
     .contact-text {
-        font-size: 1.25rem;
+        font-size: 1rem;
         line-height: 1.7;
-        font-weight: 500;
+        font-weight: 400;
     }
 }
 
 .contact-link {
     cursor: pointer;
-    font-size: inherit; /* Hérite de la taille du parent */
-    font-weight: 600; /* Augmenté de 500 à 600 pour plus de visibilité */
+    font-size: inherit;
+    font-weight: 600;
     text-decoration: none;
-    transition: all 0.3s ease; /* Ajout d'une transition smooth */
+    transition: all 0.3s ease;
 }
 
 .contact-link:hover {
@@ -107,7 +118,7 @@
 
 /* Style spécifique pour le lien Instagram */
 .instagram-link {
-    font-weight: 600; /* Plus gras pour Instagram */
+    font-weight: 600;
 }
 
 .instagram-link:hover {
@@ -121,32 +132,32 @@
     margin-bottom: 1rem; /* mb-4 */
     font-size: 0.875rem; /* Augmenté de 0.75rem à 0.875rem */
     text-align: center;
-    font-weight: 600; /* Ajout d'un effet gras */
+    font-weight: 300; /* Changé de 600 à 300 pour une typo plus fine */
 }
 
 @media (min-width: 640px) {
     .uppercase {
         font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
-        font-weight: 600;
+        font-weight: 300; /* Changé de 600 à 300 pour une typo plus fine */
     }
 }
 
 @media (min-width: 1024px) {
     .uppercase {
         font-size: 1.125rem; /* Augmenté de 1rem à 1.125rem */
-        font-weight: 600;
+        font-weight: 300; /* Changé de 600 à 300 pour une typo plus fine */
     }
 }
 
 .contact-heading {
     text-align: center;
     font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
-    font-weight: 700; /* Augmenté de 600 à 700 pour plus de visibilité */
+    font-weight: 700; /* Gardé à 700 pour les headings - pas de changement */
 }
 
 @media (min-width: 1024px) {
     .contact-heading {
         font-size: 1.25rem; /* Augmenté de 1.125rem à 1.25rem */
-        font-weight: 700;
+        font-weight: 700; /* Gardé à 700 pour les headings - pas de changement */
     }
 }
