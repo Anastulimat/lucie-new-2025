@@ -19,6 +19,9 @@
     <div class="main-content">
         <div class="project-info">
             <h1 class="project-title">{{ gallery.title|upper }}</h1>
+            {% if gallery.subtitle is defined and gallery.subtitle is not empty %}
+                <h2 class="project-subtitle">{{ gallery.subtitle }}</h2>
+            {% endif %}
             <p class="project-description">{{ gallery.description|raw|nl2br }}</p>
         </div>
 
