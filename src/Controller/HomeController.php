@@ -17,19 +17,13 @@ final class HomeController extends AbstractController
         $images = $homeGallery->getImages();
 
         /** @var Image[] $shuffledImages */
-        //$shuffledImages = $images->toArray();
-        //shuffle($shuffledImages); // Mélange aléatoire
-
-        $response = new Response();
-        $response->setCache([
-            'max_age' => 3600, // 1 heure
-            'public' => true,
-        ]);
+        $shuffledImages = $images->toArray();
+        shuffle($shuffledImages); // Mélange aléatoire
 
         return $this->render('home/index.html.twig', [
             'images' => $images,
             'controller_name' => 'HomeController',
-        ], $response);
+        ]);
     }
 
     #[Route('/contact', name: 'app_contact')]
