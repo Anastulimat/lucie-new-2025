@@ -18,10 +18,10 @@ final class HomeController extends AbstractController
 
         /** @var Image[] $shuffledImages */
         $shuffledImages = $images->toArray();
-        shuffle($shuffledImages); // Mélange aléatoire
+        shuffle($shuffledImages);
 
         return $this->render('home/index.html.twig', [
-            'images' => $images,
+            'images' => $shuffledImages,
             'controller_name' => 'HomeController',
         ]);
     }
