@@ -35,18 +35,17 @@
 }
 
 .contact-image {
-    width: 18rem; /* Augmenté de 14rem à 18rem pour mobile */
-    height: 22rem; /* Augmenté de 17rem à 22rem pour mobile */
-    border-radius: 0; /* Rectangle */
+    width: 12rem;      /* Réduit de 18rem → 12rem (mobile) */
+    height: 15rem;     /* Réduit de 22rem → 15rem (mobile) */
+    border-radius: 0;
     object-fit: cover;
-    border: 1px solid #D1D5DB; /* ring-stone-200 */
-    /* Responsive sizes */
+    border: 1px solid #D1D5DB;
 }
 
 @media (min-width: 640px) {
     .contact-image {
-        width: 20rem; /* Légèrement augmenté */
-        height: 25rem; /* Légèrement augmenté */
+        width: 14rem;  /* Réduit de 20rem → 14rem (sm) */
+        height: 17.5rem;
     }
     .text-responsive {
         font-size: 1.125rem; /* Augmenté de 0.875rem à 1.125rem */
@@ -56,8 +55,8 @@
 @media (min-width: 1024px) {
     /* lg */
     .contact-image {
-        width: 24rem; /* Largeur augmentée */
-        height: 30rem; /* Hauteur proportionnelle */
+        width: 17rem;  /* Réduit de 24rem → 17rem (lg) */
+        height: 21rem;
     }
     .text-responsive {
         font-size: 1.25rem; /* Augmenté de 1.125rem à 1.25rem */
@@ -66,8 +65,8 @@
 
 @media (min-width: 1280px) {
     .contact-image {
-        width: 28rem; /* Largeur augmentée */
-        height: 35rem; /* Hauteur proportionnelle (ratio ~1.25) */
+        width: 20rem;  /* Réduit de 28rem → 20rem (xl) */
+        height: 25rem;
     }
 }
 
